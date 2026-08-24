@@ -197,6 +197,206 @@
     });
   }
 
+  /* --------------------------------------------------------------------------
+     CUSTOM HIGH-TECH CYBER MODAL CONFIRM & ALERT DIALOGS
+     -------------------------------------------------------------------------- */
+  function createCyberModalContainer() {
+    let container = document.getElementById('cyber-modal-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'cyber-modal-container';
+      document.body.appendChild(container);
+    }
+    return container;
+  }
+
+  function showCyberConfirm(options) {
+    return new Promise((resolve) => {
+      const container = createCyberModalContainer();
+      const title = options.title || 'Konfirmasi Tindakan';
+      const text = options.text || 'Apakah Anda yakin ingin melanjutkan?';
+      const confirmText = options.confirmText || 'Ya, Lanjutkan';
+      const cancelText = options.cancelText || 'Batal';
+      const icon = options.icon || '💡';
+      const highlight = options.highlight || '';
+
+      const modalHtml = `
+        <div class="cyber-modal-backdrop" id="cyber-confirm-modal">
+          <div class="cyber-modal-card">
+            <div class="cyber-modal-icon-badge">${icon}</div>
+            <h3 class="cyber-modal-title">${title}</h3>
+            <div class="cyber-modal-body">${text}</div>
+            ${highlight ? `<div class="cyber-modal-highlight">${highlight}</div>` : ''}
+            <div class="cyber-modal-actions">
+              <button type="button" class="btn btn-outline-secondary cyber-btn-cancel" id="cyber-modal-cancel">
+                <i class="fas fa-times me-1"></i> ${cancelText}
+              </button>
+              <button type="button" class="btn btn-primary cyber-btn-confirm" id="cyber-modal-confirm">
+                <i class="fas fa-unlock me-1"></i> ${confirmText}
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = modalHtml;
+      playBlip();
+
+      const modalEl = document.getElementById('cyber-confirm-modal');
+      const confirmBtn = document.getElementById('cyber-modal-confirm');
+      const cancelBtn = document.getElementById('cyber-modal-cancel');
+
+      function cleanup(result) {
+        if (modalEl) {
+          modalEl.classList.add('cyber-modal-fadeout');
+          setTimeout(() => {
+            container.innerHTML = '';
+            resolve(result);
+          }, 180);
+        } else {
+          resolve(result);
+        }
+      }
+
+      confirmBtn.addEventListener('click', () => cleanup(true));
+      cancelBtn.addEventListener('click', () => cleanup(false));
+      modalEl.addEventListener('click', (e) => {
+        if (e.target === modalEl) cleanup(false);
+      });
+
+      const escHandler = (e) => {
+        if (e.key === 'Escape') {
+          document.removeEventListener('keydown', escHandler);
+          cleanup(false);
+        }
+      };
+      document.addEventListener('keydown', escHandler);
+    });
+  }
+
+  function showCyberAlert(options) {
+    return new Promise((resolve) => {
+      const container = createCyberModalContainer();
+      const title = options.title || 'Informasi';
+      const text = options.text || '';
+      const buttonText = options.buttonText || 'Tutup';
+      const icon = options.icon || 'ℹ️';
+
+      const modalHtml = `
+        <div class="cyber-modal-backdrop" id="cyber-alert-modal">
+          <div class="cyber-modal-card">
+            <div class="cyber-modal-icon-badge">${icon}</div>
+            <h3 class="cyber-modal-title">${title}</h3>
+            <div class="cyber-modal-body">${text}</div>
+            <div class="cyber-modal-actions justify-content-center">
+              <button type="button" class="btn btn-primary px-4 py-2" id="cyber-modal-ok">
+                <i class="fas fa-check me-1"></i> ${buttonText}
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = modalHtml;
+      playBlip();
+
+      const modalEl = document.getElementById('cyber-alert-modal');
+      const okBtn = document.getElementById('cyber-modal-ok');
+
+      function cleanup() {
+        if (modalEl) {
+          modalEl.classList.add('cyber-modal-fadeout');
+          setTimeout(() => {
+            container.innerHTML = '';
+            resolve();
+          }, 180);
+        } else {
+          resolve();
+        }
+      }
+
+      okBtn.addEventListener('click', cleanup);
+      modalEl.addEventListener('click', (e) => {
+        if (e.target === modalEl) cleanup();
+      });
+    });
+  }
+
+  window.showCyberConfirm = showCyberConfirm;
+  window.showCyberAlert = showCyberAlert;
+
+  // Intercept CTFd functions
+  function patchCTFdDialogs() {
+    if (window.CTFd && window.CTFd._functions && window.CTFd._functions.challenge) {
+      const fn = window.CTFd._functions.challenge;
+
+      fn.displayHintUnlock = function(hint) {
+        const cost = hint && hint.cost ? hint.cost : 0;
+        const title = hint && hint.title ? `Petunjuk: ${hint.title}` : 'Buka Kunci Petunjuk';
+        const highlightText = cost > 0 
+          ? `⚠️ Poin Anda akan dikurangi sebesar <strong>${cost} PTS</strong>.` 
+          : '✨ Petunjuk ini gratis (0 PTS).';
+
+        return showCyberConfirm({
+          title: title,
+          text: 'Apakah Anda yakin ingin membuka petunjuk untuk tantangan ini?',
+          highlight: highlightText,
+          confirmText: cost > 0 ? `Buka (-${cost} PTS)` : 'Buka Petunjuk',
+          cancelText: 'Batal',
+          icon: '💡'
+        });
+      };
+
+      fn.displayUnlock = function(target) {
+        return showCyberConfirm({
+          title: 'Buka Petunjuk',
+          text: 'Apakah Anda yakin ingin membuka petunjuk ini?',
+          highlight: '⚠️ Poin Anda akan dipotong untuk membuka petunjuk.',
+          confirmText: 'Buka Sekarang',
+          cancelText: 'Batal',
+          icon: '💡'
+        });
+      };
+
+      fn.displaySolutionUnlock = function(sol) {
+        return showCyberConfirm({
+          title: 'Buka Solusi / Writeup',
+          text: 'Membuka kunci solusi akan menghentikan perolehan poin Anda untuk soal ini.',
+          highlight: '⚠️ Tindakan ini permanen dan tidak dapat dibatalkan.',
+          confirmText: 'Ya, Buka Solusi',
+          cancelText: 'Batal',
+          icon: '🔓'
+        });
+      };
+
+      fn.displayUnlockError = function(err) {
+        const errors = [];
+        if (err && err.errors) {
+          Object.keys(err.errors).forEach(k => errors.push(err.errors[k]));
+        }
+        const msg = errors.length > 0 ? errors.join('<br>') : 'Gagal membuka petunjuk. Pastikan poin Anda mencukupi!';
+        return showCyberAlert({
+          title: 'Gagal Membuka Kunci',
+          text: msg,
+          buttonText: 'Mengerti',
+          icon: '❌'
+        });
+      };
+
+      fn.displayHint = function(hint) {
+        const content = hint && hint.content ? hint.content : (hint && hint.html ? hint.html : '');
+        return showCyberAlert({
+          title: '💡 Petunjuk Tantangan',
+          text: content,
+          buttonText: 'Tutup',
+          icon: '💡'
+        });
+      };
+    }
+  }
+
+  setInterval(patchCTFdDialogs, 250);
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAudioListeners);
   } else {

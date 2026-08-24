@@ -1229,4 +1229,131 @@ body {
   }
 }
 
+/* ==========================================================================
+   11. CUSTOM HIGH-TECH CYBER MODAL POPUP DIALOGS
+   ========================================================================== */
+.cyber-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: cyberModalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.cyber-modal-fadeout {
+  animation: cyberModalFadeOut 0.18s ease-in forwards !important;
+}
+
+.cyber-modal-card {
+  background: var(--card-bg);
+  border: var(--pop-border);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4), var(--pop-shadow-xl);
+  border-radius: var(--pop-radius-lg);
+  max-width: 480px;
+  width: 100%;
+  padding: 28px 24px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: cyberModalScaleUp 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.cyber-modal-icon-badge {
+  font-size: 2.4rem;
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--canvas-subtle);
+  border: var(--pop-border);
+  border-radius: 20px;
+  box-shadow: var(--pop-shadow-sm);
+}
+
+.cyber-modal-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: var(--ink-dark);
+  margin-bottom: 12px;
+}
+
+.cyber-modal-body {
+  font-size: 0.98rem;
+  color: var(--ink-secondary);
+  line-height: 1.55;
+  margin-bottom: 16px;
+}
+
+.cyber-modal-highlight {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1.5px solid var(--pop-yellow);
+  color: #b45309;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+[data-bs-theme="dark"] .cyber-modal-highlight {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+}
+
+.cyber-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.cyber-modal-actions button {
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: var(--pop-border-thin) !important;
+  box-shadow: var(--pop-shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cyber-modal-actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--pop-shadow-md);
+}
+
+@keyframes cyberModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes cyberModalFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes cyberModalScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+
 
