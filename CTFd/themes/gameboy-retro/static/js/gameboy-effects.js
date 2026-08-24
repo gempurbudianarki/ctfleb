@@ -200,7 +200,8 @@
   /* --------------------------------------------------------------------------
      FIRST BLOOD CELEBRATION TOAST & SPARKLE BANNER
      -------------------------------------------------------------------------- */
-  const seenFirstBloodKeys = new Set();
+  let lastBannerShownTime = 0;
+  let lastBannerChallenge = '';
 
   function showFirstBloodBanner(data) {
     if (!data) data = {};
@@ -216,15 +217,15 @@
     if (!solver) solver = data.title ? data.title.split('//')[0].trim() : 'Seseorang';
     if (!challenge) challenge = data.title || 'Tantangan';
 
-    const dedupeKey = `${solver}_${challenge}`.toLowerCase().trim();
+    const cleanChal = challenge.toLowerCase().trim();
     const now = Date.now();
     
-    // Check if this First Blood was already shown recently (cooldown of 45 seconds)
-    if (seenFirstBloodKeys.has(dedupeKey)) {
+    // Strict Global Debounce: Never trigger the same challenge within 30 seconds, or ANY banner within 4 seconds
+    if ((now - lastBannerShownTime < 30000 && lastBannerChallenge === cleanChal) || (now - lastBannerShownTime < 4000)) {
       return;
     }
-    seenFirstBloodKeys.add(dedupeKey);
-    setTimeout(() => seenFirstBloodKeys.delete(dedupeKey), 45000);
+    lastBannerShownTime = now;
+    lastBannerChallenge = cleanChal;
 
     // Play fanfare once
     playFirstBloodFanfare();
@@ -240,11 +241,8 @@
       }
     }
 
-    // Remove any existing active banner so they never stack awkwardly
-    const existing = container.querySelector('.first-blood-banner');
-    if (existing) {
-      existing.remove();
-    }
+    // Always clear container so multiple banners can NEVER stack!
+    container.innerHTML = '';
 
     const category = data.category || 'CTF';
     const points = data.value ? `+${data.value} PTS` : '';
@@ -256,9 +254,9 @@
           <i class="fas fa-crown text-warning me-1"></i> FIRST BLOOD // PENAKLUK PERDANA
         </div>
         <div class="fb-title-text">
-          <span class="fb-solver-name"><i class="fas fa-user-ninja me-1 text-danger"></i>${solver}</span>
-          <span class="fb-action-text">baru saja merebut</span>
-          <span class="fb-chal-name">${challenge}</span>
+          <span class="fb-solver-name me-2"><i class="fas fa-user-ninja me-1 text-danger"></i>${solver}</span>
+          <span class="fb-action-text me-2">baru saja merebut</span>
+          <span class="fb-chal-name me-2">${challenge}</span>
           ${points ? `<span class="badge bg-warning text-dark fb-pts-badge">${points}</span>` : ''}
         </div>
         <div class="fb-category-tag"><i class="fas fa-layer-group me-1"></i> Kategori: <strong>${category.toUpperCase()}</strong></div>
@@ -266,9 +264,7 @@
       </div>
     `;
 
-    const el = document.createElement('div');
-    el.innerHTML = bannerHtml;
-    container.appendChild(el.firstElementChild);
+    container.innerHTML = bannerHtml;
 
     // Auto remove after 6.5 seconds
     setTimeout(() => {
