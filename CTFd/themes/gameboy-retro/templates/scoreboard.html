@@ -111,6 +111,7 @@
 
 {% block scripts %}
   <script>
+    window.scoreboardUpdateInterval = 10000; // Real-time poll every 10 seconds
     window.scoreboardChartOptions = {
       animation: true,
       animationDuration: 400,
@@ -118,4 +119,20 @@
     };
   </script>
   {{ Assets.js("assets/js/scoreboard.js") }}
+  <script>
+    // Real-time Event Listener for instant scoreboard refresh upon new flag solve
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.CTFd && window.CTFd.events && window.CTFd.events.controller) {
+        window.CTFd.events.controller.on("scoreboard", function() {
+          if (window.Alpine) {
+            document.querySelectorAll('[x-data="ScoreboardList"], #score-graph-wrapper').forEach(el => {
+              if (el._x_dataStack && el._x_dataStack[0] && el._x_dataStack[0].update) {
+                el._x_dataStack[0].update();
+              }
+            });
+          }
+        });
+      }
+    });
+  </script>
 {% endblock %}
