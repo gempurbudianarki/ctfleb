@@ -16,20 +16,16 @@
   <div class="container scoreboard-container">
     {% include "components/errors.html" %}
 
-    <div x-data="{ ...ScoreboardDetail(), graphOpen: true }" x-show="show && Object.keys(data).length > 0" class="mb-5">
+    <div id="score-graph-wrapper" class="mb-5" x-data="ScoreboardDetail" x-show="show" @bracket-change.window="activeBracket=$event.detail; update();">
       <div class="card p-4 shadow-sm" style="border: var(--pop-border); border-radius: 16px;">
         <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
           <div class="d-flex align-items-center gap-2">
             <i class="fas fa-chart-line" style="color: var(--pop-blue); font-size: 1.2rem;"></i>
-            <h4 class="mb-0 fw-bold" style="font-family: var(--font-heading);">SCORE PROGRESSION</h4>
-            <span class="badge bg-light text-dark border ms-2" style="font-size: 0.75rem;">TOP 10 TIMELINE</span>
+            <h4 class="mb-0 fw-bold" style="font-family: var(--font-heading); color: var(--ink-dark);">SCORE PROGRESSION</h4>
+            <span class="badge bg-light text-dark border ms-2" style="font-size: 0.75rem; font-weight: 700;">TOP 10 TIMELINE</span>
           </div>
-          <button class="btn btn-sm btn-outline-primary" @click="graphOpen = !graphOpen" style="border-radius: 8px; font-size: 0.8rem; font-weight: 700;">
-            <i :class="graphOpen ? 'fas fa-eye-slash me-1' : 'fas fa-chart-line me-1'"></i>
-            <span x-text="graphOpen ? 'Sembunyikan Grafik' : 'Tampilkan Grafik'"></span>
-          </button>
         </div>
-        <div id="score-graph" class="w-100" style="min-height: 380px;" x-show="graphOpen" x-ref="scoregraph" @bracket-change.window="activeBracket=$event.detail; update();">
+        <div id="score-graph" class="w-100" style="min-height: 400px; height: 400px;" x-ref="scoregraph">
           <div class="d-flex align-items-center justify-content-center h-100 py-5">
             <div class="text-center">
               <i class="fas fa-circle-notch fa-spin fa-2x fa-fw text-primary mb-2"></i>
