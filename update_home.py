@@ -13,9 +13,9 @@ with app.app_context():
     <!-- Cyber Hero Jumbotron -->
     <div class="jumbotron py-5 px-4 mb-4 position-relative overflow-hidden" style="border-radius: 20px;">
       <div class="d-inline-flex align-items-center gap-2 mb-3 flex-wrap justify-content-center">
-        <span class="badge" style="background: var(--pop-blue); color: #fff; font-size: 0.85rem; font-weight: 800; padding: 7px 18px; border-radius: 9999px; border: var(--pop-border-thin); box-shadow: var(--pop-shadow-sm);">🏛️ ORGANIZER: CCA</span>
+        <span class="badge" style="background: var(--pop-blue); color: #fff; font-size: 0.85rem; font-weight: 800; padding: 7px 18px; border-radius: 9999px; border: var(--pop-border-thin); box-shadow: var(--pop-shadow-sm);"><i class="fas fa-shield-alt me-1"></i> ORGANIZER: CCA</span>
         <span class="badge" style="background: var(--pop-pink); color: #fff; font-size: 0.85rem; font-weight: 800; padding: 7px 18px; border-radius: 9999px; border: var(--pop-border-thin); box-shadow: var(--pop-shadow-sm);"><i class="fas fa-bolt me-1"></i> LIVE COMPETITION</span>
-        <span class="badge" style="background: var(--pop-yellow); color: #12162a; font-size: 0.85rem; font-weight: 800; padding: 7px 18px; border-radius: 9999px; border: var(--pop-border-thin); box-shadow: var(--pop-shadow-sm);">🎮 NEO ARCADE</span>
+        <span class="badge" style="background: var(--pop-yellow); color: #12162a; font-size: 0.85rem; font-weight: 800; padding: 7px 18px; border-radius: 9999px; border: var(--pop-border-thin); box-shadow: var(--pop-shadow-sm);"><i class="fas fa-terminal me-1"></i> NEO ARCADE</span>
       </div>
 
       <h1 class="display-4 fw-bold mb-3" style="font-family: var(--font-heading); color: var(--ink-dark); font-size: 3.1rem; letter-spacing: -1px; line-height: 1.15;">
@@ -39,13 +39,13 @@ with app.app_context():
       <div class="row g-2 justify-content-center pt-2">
         <div class="col-6 col-md-3">
           <div class="p-3 bg-white border rounded-3" style="border: var(--pop-border-thin) !important; box-shadow: var(--pop-shadow-sm);">
-            <div style="font-size: 1.4rem; font-weight: 900; color: var(--pop-blue); font-family: var(--font-mono);">7</div>
-            <div style="font-size: 0.78rem; font-weight: 700; color: var(--ink-muted); text-transform: uppercase;">Kategori Soal</div>
+            <div style="font-size: 1.4rem; font-weight: 900; color: var(--pop-blue); font-family: var(--font-mono);">6</div>
+            <div style="font-size: 0.78rem; font-weight: 700; color: var(--ink-muted); text-transform: uppercase;">Kategori Aktif</div>
           </div>
         </div>
         <div col="col-6 col-md-3" class="col-6 col-md-3">
           <div class="p-3 bg-white border rounded-3" style="border: var(--pop-border-thin) !important; box-shadow: var(--pop-shadow-sm);">
-            <div style="font-size: 1.4rem; font-weight: 900; color: var(--pop-pink); font-family: var(--font-mono);">1,000+</div>
+            <div style="font-size: 1.4rem; font-weight: 900; color: var(--pop-pink); font-family: var(--font-mono);">4,500+</div>
             <div style="font-size: 0.78rem; font-weight: 700; color: var(--ink-muted); text-transform: uppercase;">Total Poin</div>
           </div>
         </div>
@@ -67,19 +67,9 @@ with app.app_context():
     <!-- Category Highlights Grid -->
     <div class="row g-4 text-start mb-5">
       <div class="col-md-4">
-        <div class="card h-100 p-4" style="border-left: 6px solid var(--cat-web); border-radius: 16px;">
-          <div class="d-flex align-items-center gap-3 mb-2">
-            <div style="background: rgba(37, 99, 235, 0.12); width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin); font-size: 1.3rem;">🌐</div>
-            <h4 class="mb-0 fw-bold" style="font-family: var(--font-heading);">Web Exploitation</h4>
-          </div>
-          <p class="text-muted mb-0" style="font-size: 0.95rem;">Uji kerentanan web security, SQL injection, XSS, SSRF, authentication bypass, dan API security.</p>
-        </div>
-      </div>
-
-      <div class="col-md-4">
         <div class="card h-100 p-4" style="border-left: 6px solid var(--cat-crypto); border-radius: 16px;">
           <div class="d-flex align-items-center gap-3 mb-2">
-            <div style="background: rgba(124, 58, 237, 0.12); width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin); font-size: 1.3rem;">🔐</div>
+            <div style="background: rgba(124, 58, 237, 0.12); width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin); font-size: 1.3rem;"><i class="fas fa-key text-warning"></i></div>
             <h4 class="mb-0 fw-bold" style="font-family: var(--font-heading);">Cryptography</h4>
           </div>
           <p class="text-muted mb-0" style="font-size: 0.95rem;">Pecahkan sandi klasik, enkripsi modern, RSA, AES, modulo arithmetic, dan algoritma hash custom.</p>
@@ -89,7 +79,7 @@ with app.app_context():
       <div class="col-md-4">
         <div class="card h-100 p-4" style="border-left: 6px solid var(--cat-reverse); border-radius: 16px;">
           <div class="d-flex align-items-center gap-3 mb-2">
-            <div style="background: rgba(219, 39, 119, 0.12); width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin); font-size: 1.3rem;">⚡</div>
+            <div style="background: rgba(219, 39, 119, 0.12); width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin); font-size: 1.3rem;"><i class="fas fa-microchip text-primary"></i></div>
             <h4 class="mb-0 fw-bold" style="font-family: var(--font-heading);">Reverse Engineering</h4>
           </div>
           <p class="text-muted mb-0" style="font-size: 0.95rem;">Dekompresi binary, analisis instruksi assembly, decompile bytecode, dan bongkar logika verifikasi ROM.</p>
@@ -99,7 +89,7 @@ with app.app_context():
       <div class="col-md-4">
         <div class="card h-100 p-4" style="border-left: 6px solid var(--cat-pwn); border-radius: 16px;">
           <div class="d-flex align-items-center gap-3 mb-2">
-            <div style="background: rgba(220, 38, 38, 0.12); width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin); font-size: 1.3rem;">💥</div>
+            <div style="background: rgba(220, 38, 38, 0.12); width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin); font-size: 1.3rem;"><i class="fas fa-bomb text-danger"></i></div>
             <h4 class="mb-0 fw-bold" style="font-family: var(--font-heading);">Binary Exploitation</h4>
           </div>
           <p class="text-muted mb-0" style="font-size: 0.95rem;">Buffer overflow, format string exploit, ROP chain, dan manipulasi alur eksekusi memori.</p>
@@ -109,7 +99,7 @@ with app.app_context():
       <div class="col-md-4">
         <div class="card h-100 p-4" style="border-left: 6px solid var(--cat-forensics); border-radius: 16px;">
           <div class="d-flex align-items-center gap-3 mb-2">
-            <div style="background: rgba(5, 150, 105, 0.12); width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin); font-size: 1.3rem;">🔍</div>
+            <div style="background: rgba(5, 150, 105, 0.12); width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin); font-size: 1.3rem;"><i class="fas fa-fingerprint text-success"></i></div>
             <h4 class="mb-0 fw-bold" style="font-family: var(--font-heading);">Digital Forensics</h4>
           </div>
           <p class="text-muted mb-0" style="font-size: 0.95rem;">Analisis packet PCAP, ekstraksi artefak memori dump, steganografi gambar, dan rekonstruksi file.</p>
@@ -119,10 +109,20 @@ with app.app_context():
       <div class="col-md-4">
         <div class="card h-100 p-4" style="border-left: 6px solid var(--cat-osint); border-radius: 16px;">
           <div class="d-flex align-items-center gap-3 mb-2">
-            <div style="background: rgba(217, 119, 6, 0.12); width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin); font-size: 1.3rem;">🛰️</div>
-            <h4 class="mb-0 fw-bold" style="font-family: var(--font-heading);">OSINT & Misc</h4>
+            <div style="background: rgba(217, 119, 6, 0.12); width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin); font-size: 1.3rem;"><i class="fas fa-satellite-dish text-info"></i></div>
+            <h4 class="mb-0 fw-bold" style="font-family: var(--font-heading);">OSINT</h4>
           </div>
-          <p class="text-muted mb-0" style="font-size: 0.95rem;">Investigasi jejak digital sumber terbuka, geolokasi satelit, metadata rahasia, dan teka-teki logika.</p>
+          <p class="text-muted mb-0" style="font-size: 0.95rem;">Investigasi jejak digital sumber terbuka, geolokasi satelit, metadata rahasia, dan rekonsiliasi data intelijen.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card h-100 p-4" style="border-left: 6px solid var(--pop-yellow); border-radius: 16px;">
+          <div class="d-flex align-items-center gap-3 mb-2">
+            <div style="background: rgba(234, 179, 8, 0.12); width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin); font-size: 1.3rem;"><i class="fas fa-cube text-warning"></i></div>
+            <h4 class="mb-0 fw-bold" style="font-family: var(--font-heading);">Miscellaneous</h4>
+          </div>
+          <p class="text-muted mb-0" style="font-size: 0.95rem;">Tantangan logika unik, pipeline encoding bertingkat, sanity check, dan eksplorasi teka-teki cyber.</p>
         </div>
       </div>
     </div>
@@ -143,7 +143,7 @@ with app.app_context():
         <div style="color: #94a3b8;" class="mt-2">> 1. Format Flag: <span style="color: #facc15; font-weight: 700;">CTF{string_jawaban}</span> atau <span style="color: #facc15; font-weight: 700;">CCA{...}</span></div>
         <div style="color: #94a3b8;">> 2. Dilarang melakukan serangan DoS / Brute-force terhadap server infrastruktur platform.</div>
         <div style="color: #94a3b8;">> 3. Dilarang membagikan jawaban/flag ke peserta lain selama kompetisi aktif.</div>
-        <div style="color: #34d399;" class="mt-2">> [STATUS] System ready. Happy Hacking and Good Luck! 🚀</div>
+        <div style="color: #34d399;" class="mt-2">> [STATUS] System ready. Happy Hacking and Good Luck! <i class="fas fa-flag-checkered ms-1"></i></div>
       </div>
     </div>
 

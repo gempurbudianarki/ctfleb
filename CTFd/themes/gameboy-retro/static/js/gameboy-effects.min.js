@@ -217,7 +217,7 @@
       const text = options.text || 'Apakah Anda yakin ingin melanjutkan?';
       const confirmText = options.confirmText || 'Ya, Lanjutkan';
       const cancelText = options.cancelText || 'Batal';
-      const icon = options.icon || '💡';
+      const icon = options.icon || '<i class="fas fa-lightbulb text-warning"></i>';
       const highlight = options.highlight || '';
 
       const modalHtml = `
@@ -280,7 +280,7 @@
       const title = options.title || 'Informasi';
       const text = options.text || '';
       const buttonText = options.buttonText || 'Tutup';
-      const icon = options.icon || 'ℹ️';
+      const icon = options.icon || '<i class="fas fa-info-circle text-primary"></i>';
 
       const modalHtml = `
         <div class="cyber-modal-backdrop" id="cyber-alert-modal">
@@ -334,8 +334,8 @@
         const cost = hint && hint.cost ? hint.cost : 0;
         const title = hint && hint.title ? `Petunjuk: ${hint.title}` : 'Buka Kunci Petunjuk';
         const highlightText = cost > 0 
-          ? `⚠️ Poin Anda akan dikurangi sebesar <strong>${cost} PTS</strong>.` 
-          : '✨ Petunjuk ini gratis (0 PTS).';
+          ? `<i class="fas fa-exclamation-circle text-warning me-1"></i> Poin Anda akan dikurangi sebesar <strong>${cost} PTS</strong>.` 
+          : '<i class="fas fa-check-circle text-success me-1"></i> Petunjuk ini gratis (0 PTS).';
 
         return showCyberConfirm({
           title: title,
@@ -343,7 +343,7 @@
           highlight: highlightText,
           confirmText: cost > 0 ? `Buka (-${cost} PTS)` : 'Buka Petunjuk',
           cancelText: 'Batal',
-          icon: '💡'
+          icon: '<i class="fas fa-lightbulb text-warning"></i>'
         });
       };
 
@@ -351,10 +351,10 @@
         return showCyberConfirm({
           title: 'Buka Petunjuk',
           text: 'Apakah Anda yakin ingin membuka petunjuk ini?',
-          highlight: '⚠️ Poin Anda akan dipotong untuk membuka petunjuk.',
+          highlight: '<i class="fas fa-exclamation-circle text-warning me-1"></i> Poin Anda akan dipotong untuk membuka petunjuk.',
           confirmText: 'Buka Sekarang',
           cancelText: 'Batal',
-          icon: '💡'
+          icon: '<i class="fas fa-lightbulb text-warning"></i>'
         });
       };
 
@@ -362,10 +362,10 @@
         return showCyberConfirm({
           title: 'Buka Solusi / Writeup',
           text: 'Membuka kunci solusi akan menghentikan perolehan poin Anda untuk soal ini.',
-          highlight: '⚠️ Tindakan ini permanen dan tidak dapat dibatalkan.',
+          highlight: '<i class="fas fa-exclamation-triangle text-danger me-1"></i> Tindakan ini permanen dan tidak dapat dibatalkan.',
           confirmText: 'Ya, Buka Solusi',
           cancelText: 'Batal',
-          icon: '🔓'
+          icon: '<i class="fas fa-unlock text-primary"></i>'
         });
       };
 
@@ -379,17 +379,17 @@
           title: 'Gagal Membuka Kunci',
           text: msg,
           buttonText: 'Mengerti',
-          icon: '❌'
+          icon: '<i class="fas fa-times-circle text-danger"></i>'
         });
       };
 
       fn.displayHint = function(hint) {
         const content = hint && hint.content ? hint.content : (hint && hint.html ? hint.html : '');
         return showCyberAlert({
-          title: '💡 Petunjuk Tantangan',
+          title: 'Petunjuk Tantangan',
           text: content,
           buttonText: 'Tutup',
-          icon: '💡'
+          icon: '<i class="fas fa-lightbulb text-warning"></i>'
         });
       };
     }
@@ -411,18 +411,17 @@
           title: this.title ? `Petunjuk: ${this.title}` : 'Buka Kunci Petunjuk',
           text: 'Apakah Anda yakin ingin membuka petunjuk untuk tantangan ini?',
           highlight: this.cost > 0 
-            ? `⚠️ Poin Anda akan dikurangi sebesar <strong>${this.cost} PTS</strong>.` 
-            : '✨ Petunjuk ini gratis (0 PTS).',
+            ? `<i class="fas fa-exclamation-circle text-warning me-1"></i> Poin Anda akan dikurangi sebesar <strong>${this.cost} PTS</strong>.` 
+            : '<i class="fas fa-check-circle text-success me-1"></i> Petunjuk ini gratis (0 PTS).',
           confirmText: this.cost > 0 ? `Buka (-${this.cost} PTS)` : 'Buka Sekarang',
           cancelText: 'Batal',
-          icon: '💡'
+          icon: '<i class="fas fa-lightbulb text-warning"></i>'
         });
 
         if (!confirmed) return;
 
         this.loading = true;
         try {
-          // Check if already unlocked
           const checkRes = await fetch(`${window.init ? window.init.urlRoot : ''}/api/v1/hints/${this.id}`, {
             method: 'GET',
             headers: {
@@ -437,7 +436,6 @@
             return;
           }
 
-          // Request unlock
           const unlockRes = await fetch(`${window.init ? window.init.urlRoot : ''}/api/v1/unlocks`, {
             method: 'POST',
             headers: {
@@ -471,7 +469,7 @@
               title: 'Gagal Membuka Petunjuk',
               text: msg,
               buttonText: 'Mengerti',
-              icon: '❌'
+              icon: '<i class="fas fa-times-circle text-danger"></i>'
             });
           }
         } catch (e) {

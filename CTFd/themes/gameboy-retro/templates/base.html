@@ -29,20 +29,20 @@
           return window.showCyberConfirm({
             title: 'Buka Petunjuk (Unlock Hint)',
             text: 'Apakah Anda yakin ingin membuka petunjuk untuk tantangan ini?',
-            highlight: '⚠️ Poin Anda akan dikurangi untuk membuka petunjuk.',
+            highlight: '<i class="fas fa-exclamation-circle text-warning me-1"></i> Poin Anda akan dikurangi untuk membuka petunjuk.',
             confirmText: 'Buka Sekarang',
             cancelText: 'Batal',
-            icon: '💡'
+            icon: '<i class="fas fa-lightbulb text-warning"></i>'
           });
         }
         if (typeof msg === 'string' && (msg.toLowerCase().includes('unlock this solution') || msg.toLowerCase().includes('solusi'))) {
           return window.showCyberConfirm({
             title: 'Buka Solusi (Writeup)',
             text: 'Membuka solusi resmi akan menghentikan perolehan poin Anda untuk soal ini.',
-            highlight: '⚠️ Tindakan ini permanen dan tidak dapat dibatalkan.',
+            highlight: '<i class="fas fa-exclamation-triangle text-danger me-1"></i> Tindakan ini permanen dan tidak dapat dibatalkan.',
             confirmText: 'Ya, Buka Solusi',
             cancelText: 'Batal',
-            icon: '🔓'
+            icon: '<i class="fas fa-unlock text-primary"></i>'
           });
         }
         return window.showCyberConfirm({
@@ -50,7 +50,7 @@
           text: msg || 'Apakah Anda yakin ingin melanjutkan?',
           confirmText: 'Lanjutkan',
           cancelText: 'Batal',
-          icon: '❓'
+          icon: '<i class="fas fa-question-circle text-primary"></i>'
         });
       }
       return true;

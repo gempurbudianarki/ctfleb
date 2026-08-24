@@ -4,7 +4,7 @@
   <div class="jumbotron challenges-header">
     <div class="container text-center">
       <div class="d-inline-flex align-items-center gap-2 mb-2">
-        <span class="badge" style="background: var(--pop-blue); color: #fff; font-size: 0.85rem; font-weight: 800; padding: 6px 14px; border-radius: 9999px; border: var(--pop-border-thin);">⚡ MISSION CONTROL</span>
+        <span class="badge" style="background: var(--pop-blue); color: #fff; font-size: 0.85rem; font-weight: 800; padding: 6px 14px; border-radius: 9999px; border: var(--pop-border-thin);"><i class="fas fa-terminal me-1"></i> MISSION CONTROL</span>
       </div>
       <h1 class="challenges-title mb-2">
         {% trans %}CHALLENGES{% endtrans %}
@@ -73,7 +73,7 @@
             @click="selectedCategory = 'ALL'"
             style="border-radius: 9999px; white-space: nowrap; font-size: 0.85rem;"
           >
-            ⚡ SEMUA KATEGORI (<span x-text="challenges.length"></span>)
+            <i class="fas fa-layer-group me-1"></i> SEMUA KATEGORI (<span x-text="challenges.length"></span>)
           </button>
           <template x-for="(cat, idx) in getCategories()" :key="idx">
             <button 
@@ -98,13 +98,13 @@
                 <div class="category-header-banner mb-3 d-flex align-items-center justify-content-between">
                   <div class="d-flex align-items-center gap-2">
                     <span class="category-pixel-icon" style="font-size: 1.25rem;">
-                      <template x-if="category.toLowerCase().includes('web')"><span>🌐</span></template>
-                      <template x-if="category.toLowerCase().includes('crypto')"><span>🔐</span></template>
-                      <template x-if="category.toLowerCase().includes('rev')"><span>⚡</span></template>
-                      <template x-if="category.toLowerCase().includes('pwn')"><span>💥</span></template>
-                      <template x-if="category.toLowerCase().includes('forensic')"><span>🔍</span></template>
-                      <template x-if="category.toLowerCase().includes('osint')"><span>🛰️</span></template>
-                      <template x-if="!category.toLowerCase().includes('web') && !category.toLowerCase().includes('crypto') && !category.toLowerCase().includes('rev') && !category.toLowerCase().includes('pwn') && !category.toLowerCase().includes('forensic') && !category.toLowerCase().includes('osint')"><span>🎯</span></template>
+                      <template x-if="category.toLowerCase().includes('web')"><i class="fas fa-globe text-info"></i></template>
+                      <template x-if="category.toLowerCase().includes('crypto')"><i class="fas fa-key text-warning"></i></template>
+                      <template x-if="category.toLowerCase().includes('rev')"><i class="fas fa-microchip text-primary"></i></template>
+                      <template x-if="category.toLowerCase().includes('pwn')"><i class="fas fa-bomb text-danger"></i></template>
+                      <template x-if="category.toLowerCase().includes('forensic')"><i class="fas fa-fingerprint text-success"></i></template>
+                      <template x-if="category.toLowerCase().includes('osint')"><i class="fas fa-satellite-dish text-info"></i></template>
+                      <template x-if="!category.toLowerCase().includes('web') && !category.toLowerCase().includes('crypto') && !category.toLowerCase().includes('rev') && !category.toLowerCase().includes('pwn') && !category.toLowerCase().includes('forensic') && !category.toLowerCase().includes('osint')"><i class="fas fa-cube text-primary"></i></template>
                     </span>
                     <h3 class="category-name mb-0" x-text="category.toUpperCase()"></h3>
                   </div>

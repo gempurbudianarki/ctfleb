@@ -60,7 +60,7 @@
             <!-- 2nd Place (Silver) -->
             <div class="col-md-4 order-md-1">
               <div class="podium-spotlight-card podium-silver p-3 text-center h-100">
-                <div class="podium-badge-icon">🥈</div>
+                <div class="podium-badge-icon"><i class="fas fa-medal" style="color: #94a3b8; font-size: 2rem;"></i></div>
                 <div class="podium-rank-title">2ND PLACE</div>
                 <h5 class="podium-player-name text-truncate mb-1">
                   <a :href="standings[1].account_url" x-text="standings[1].name"></a>
@@ -71,7 +71,7 @@
             <!-- 1st Place (Gold Champion) -->
             <div class="col-md-4 order-md-0 order-lg-1">
               <div class="podium-spotlight-card podium-gold p-4 text-center h-100">
-                <div class="podium-badge-icon" style="font-size: 2.2rem;">👑</div>
+                <div class="podium-badge-icon"><i class="fas fa-crown text-warning" style="font-size: 2.3rem;"></i></div>
                 <div class="podium-rank-title text-warning">CHAMPION • 1ST</div>
                 <h4 class="podium-player-name text-truncate mb-1 fw-bold">
                   <a :href="standings[0].account_url" x-text="standings[0].name"></a>
@@ -82,7 +82,7 @@
             <!-- 3rd Place (Bronze) -->
             <div class="col-md-4 order-md-2">
               <div class="podium-spotlight-card podium-bronze p-3 text-center h-100">
-                <div class="podium-badge-icon">🥉</div>
+                <div class="podium-badge-icon"><i class="fas fa-award" style="color: #cd7f32; font-size: 2rem;"></i></div>
                 <div class="podium-rank-title">3RD PLACE</div>
                 <h5 class="podium-player-name text-truncate mb-1">
                   <a :href="standings[2].account_url" x-text="standings[2].name"></a>
@@ -115,13 +115,13 @@
                 }">
                   <td class="text-center rank-cell">
                     <template x-if="index === 0">
-                      <span class="podium-badge podium-1">👑 1ST</span>
+                      <span class="podium-badge podium-1"><i class="fas fa-crown me-1 text-warning"></i> 1ST</span>
                     </template>
                     <template x-if="index === 1">
-                      <span class="podium-badge podium-2">🥈 2ND</span>
+                      <span class="podium-badge podium-2"><i class="fas fa-medal me-1" style="color: #94a3b8;"></i> 2ND</span>
                     </template>
                     <template x-if="index === 2">
-                      <span class="podium-badge podium-3">🥉 3RD</span>
+                      <span class="podium-badge podium-3"><i class="fas fa-award me-1" style="color: #cd7f32;"></i> 3RD</span>
                     </template>
                     <template x-if="index > 2">
                       <span class="rank-number" x-text="'#' + (index + 1)"></span>
