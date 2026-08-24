@@ -582,6 +582,65 @@
     };
   };
 
+  /* --------------------------------------------------------------------------
+     REAL-TIME DEDICATED SSE & AUTO-SYNC TELEMETRY ENGINE
+     -------------------------------------------------------------------------- */
+  let lastProcessedNotifId = parseInt(localStorage.getItem('cca_last_notif_id') || '0', 10);
+
+  function initDedicatedSSE() {
+    try {
+      const urlRoot = window.init && window.init.urlRoot ? window.init.urlRoot : '';
+      const sse = new EventSource(urlRoot + '/events');
+
+      sse.addEventListener('notification', function(e) {
+        try {
+          const data = JSON.parse(e.data);
+          if (data) {
+            if (data.id && data.id > lastProcessedNotifId) {
+              lastProcessedNotifId = data.id;
+              localStorage.setItem('cca_last_notif_id', String(data.id));
+            }
+            if (data.type === 'first_blood' || (data.title && data.title.includes('FIRST BLOOD'))) {
+              showFirstBloodBanner(data);
+              // Trigger reactive UI updates
+              window.dispatchEvent(new CustomEvent('load-challenges'));
+              window.dispatchEvent(new CustomEvent('load-scoreboard'));
+            }
+          }
+        } catch (err) {}
+      });
+    } catch (err) {}
+  }
+
+  // Fallback Polling & Auto-Refresh for Challenges / Scoreboard
+  async function pollLiveTelemetry() {
+    try {
+      const urlRoot = window.init && window.init.urlRoot ? window.init.urlRoot : '';
+
+      // 1. Check for unread notifications / First Blood
+      const res = await fetch(`${urlRoot}/api/v1/notifications`, {
+        headers: { 'Accept': 'application/json' }
+      });
+      const data = await res.json();
+      if (data && data.data && Array.isArray(data.data)) {
+        data.data.forEach(n => {
+          if (n.id > lastProcessedNotifId) {
+            lastProcessedNotifId = n.id;
+            localStorage.setItem('cca_last_notif_id', String(n.id));
+            if (n.type === 'first_blood' || (n.title && n.title.includes('FIRST BLOOD'))) {
+              showFirstBloodBanner(n);
+            }
+          }
+        });
+      }
+
+      // 2. Auto-sync Challenges if on /challenges
+      if (window.location.pathname.includes('/challenges')) {
+        window.dispatchEvent(new CustomEvent('load-challenges'));
+      }
+    } catch (e) {}
+  }
+
   function hookCTFdEvents() {
     if (window.CTFd && window.CTFd.events && window.CTFd.events.controller) {
       const c = window.CTFd.events.controller;
@@ -598,10 +657,15 @@
 
   setInterval(patchCTFdDialogs, 250);
   setInterval(hookCTFdEvents, 300);
+  setInterval(pollLiveTelemetry, 12000); // Auto-sync every 12 seconds
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAudioListeners);
+    document.addEventListener('DOMContentLoaded', () => {
+      initAudioListeners();
+      initDedicatedSSE();
+    });
   } else {
     initAudioListeners();
+    initDedicatedSSE();
   }
 })();
