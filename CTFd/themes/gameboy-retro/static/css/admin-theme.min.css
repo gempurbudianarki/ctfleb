@@ -1,0 +1,364 @@
+/* ==========================================================================
+   CCA VIBRANT NEO-POP ADMIN PANEL THEME
+   Modern, Clean, High-Contrast Dashboard Styling (Zero Clipping)
+   ========================================================================== */
+
+:root {
+  --canvas-bg: #f8fafc;
+  --card-bg: #ffffff;
+  --ink-dark: #0f172a;
+  --ink-secondary: #334155;
+  --ink-muted: #475569;
+  
+  --pop-blue: #3b52d4;
+  --pop-blue-hover: #2d3eb0;
+  --pop-cyan: #0284c7;
+  --pop-pink: #ec4899;
+  --pop-purple: #7c3aed;
+  --pop-yellow: #f59e0b;
+  --pop-teal: #059669;
+  --pop-red: #dc2626;
+
+  --pop-border: 2px solid #0f172a;
+  --pop-border-thin: 1.5px solid #0f172a;
+  --pop-radius-md: 10px;
+  --pop-radius-lg: 14px;
+  --pop-radius-pill: 9999px;
+
+  --pop-shadow-sm: 2px 2px 0px #0f172a;
+  --pop-shadow-md: 4px 4px 0px #0f172a;
+  --pop-shadow-lg: 6px 6px 0px #0f172a;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--canvas-bg) !important;
+  color: var(--ink-dark) !important;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(59, 82, 212, 0.08) 1px, transparent 0);
+  background-size: 24px 24px;
+  margin-bottom: 0 !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  letter-spacing: -0.5px;
+  line-height: 1.3 !important;
+}
+
+/* Admin Navbar */
+.navbar {
+  background: #ffffff !important;
+  border-bottom: var(--pop-border) !important;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06) !important;
+  padding: 10px 20px !important;
+  height: auto !important;
+}
+
+.navbar-brand {
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  color: var(--ink-dark) !important;
+  background: #ffffff;
+  padding: 6px 14px !important;
+  border: var(--pop-border) !important;
+  border-radius: var(--pop-radius-md) !important;
+  box-shadow: var(--pop-shadow-sm) !important;
+  height: auto !important;
+  line-height: 1.2 !important;
+}
+
+.nav-link {
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+  padding: 8px 14px !important;
+  margin: 0 2px;
+  border-radius: var(--pop-radius-pill) !important;
+  transition: all 0.15s ease !important;
+  height: auto !important;
+  line-height: 1.4 !important;
+}
+
+.nav-link:hover {
+  background-color: #e0e7ff !important;
+  color: var(--pop-blue) !important;
+}
+
+.nav-link.active {
+  background-color: var(--pop-blue) !important;
+  color: #ffffff !important;
+  box-shadow: var(--pop-shadow-sm) !important;
+}
+
+/* Admin Jumbotron / Header */
+.jumbotron {
+  background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%) !important;
+  border: var(--pop-border) !important;
+  border-radius: var(--pop-radius-lg) !important;
+  box-shadow: var(--pop-shadow-lg) !important;
+  padding: 28px 24px !important;
+  margin-top: 20px;
+  margin-bottom: 28px !important;
+  height: auto !important;
+}
+
+/* Cards */
+.card {
+  background-color: #ffffff !important;
+  border: var(--pop-border) !important;
+  border-radius: var(--pop-radius-lg) !important;
+  box-shadow: var(--pop-shadow-md) !important;
+  margin-bottom: 24px;
+  height: auto !important;
+  overflow: visible !important;
+}
+
+.card-header {
+  background-color: #f1f5f9 !important;
+  border-bottom: var(--pop-border) !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 800 !important;
+  padding: 14px 20px !important;
+  height: auto !important;
+  line-height: 1.4 !important;
+}
+
+.card-body {
+  padding: 20px 24px !important;
+  height: auto !important;
+}
+
+/* Buttons */
+.btn {
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 0.92rem !important;
+  font-weight: 750 !important;
+  padding: 8px 18px !important;
+  border: var(--pop-border) !important;
+  border-radius: var(--pop-radius-md) !important;
+  box-shadow: var(--pop-shadow-sm) !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: auto !important;
+  min-height: 40px !important;
+  line-height: 1.4 !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+}
+
+.btn:hover {
+  transform: translate(-2px, -2px) !important;
+  box-shadow: var(--pop-shadow-md) !important;
+}
+
+.btn:active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 1px 1px 0px #0f172a !important;
+}
+
+.btn-primary, .btn-success {
+  background-color: var(--pop-blue) !important;
+  color: #ffffff !important;
+}
+
+.btn-danger {
+  background-color: var(--pop-red) !important;
+  color: #ffffff !important;
+}
+
+.btn-warning {
+  background-color: var(--pop-yellow) !important;
+  color: #0f172a !important;
+}
+
+.btn-info {
+  background-color: var(--pop-cyan) !important;
+  color: #ffffff !important;
+}
+
+.btn-outline-secondary {
+  background-color: #ffffff !important;
+  color: var(--ink-dark) !important;
+}
+
+/* ==========================================================================
+   FORM CONTROLS & SELECTS (ZERO CLIPPING / FULL HEIGHT & PROPER LINE HEIGHT)
+   ========================================================================== */
+
+.form-control,
+.form-select,
+.custom-select,
+select.form-control,
+select.custom-select,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="url"],
+input[type="tel"],
+input[type="search"],
+input[type="file"],
+select,
+textarea {
+  height: auto !important;
+  min-height: 46px !important;
+  line-height: 1.5 !important;
+  font-size: 0.95rem !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 500 !important;
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+  border: var(--pop-border) !important;
+  border-radius: var(--pop-radius-md) !important;
+  padding: 8px 14px !important;
+  box-shadow: var(--pop-shadow-sm) !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  vertical-align: middle !important;
+}
+
+select,
+select.form-control,
+.form-select,
+.custom-select {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  padding-right: 32px !important;
+  background-color: #ffffff !important;
+  background-position: right 12px center !important;
+  cursor: pointer;
+}
+
+textarea.form-control,
+textarea {
+  min-height: 110px !important;
+  line-height: 1.6 !important;
+  padding: 12px 14px !important;
+}
+
+.form-control:focus,
+.form-select:focus,
+.custom-select:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--pop-blue) !important;
+  box-shadow: 0 0 0 3px rgba(59, 82, 212, 0.2), var(--pop-shadow-md) !important;
+  outline: none !important;
+}
+
+.form-group,
+.mb-3 {
+  margin-bottom: 20px !important;
+}
+
+.form-group label,
+label {
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin-bottom: 8px !important;
+  display: inline-block !important;
+}
+
+.form-text,
+small.form-text,
+.text-muted {
+  font-size: 0.85rem !important;
+  color: #475569 !important;
+  font-weight: 500 !important;
+  margin-top: 6px !important;
+  display: block !important;
+  line-height: 1.4 !important;
+}
+
+/* Tables */
+.table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border: var(--pop-border) !important;
+  border-radius: var(--pop-radius-lg) !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+  box-shadow: var(--pop-shadow-md) !important;
+  width: 100% !important;
+}
+
+.table thead th {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 800 !important;
+  padding: 14px 16px !important;
+  border: none !important;
+}
+
+.table tbody tr td,
+.table tbody tr th {
+  padding: 14px 16px !important;
+  vertical-align: middle !important;
+  border-bottom: 1.5px solid #f1f5f9 !important;
+  line-height: 1.4 !important;
+}
+
+.table tbody tr:hover {
+  background-color: #f8faff !important;
+}
+
+/* Badges */
+.badge {
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  padding: 4px 10px !important;
+  border-radius: var(--pop-radius-pill) !important;
+  border: var(--pop-border-thin) !important;
+  line-height: 1.3 !important;
+}
+
+.bg-primary { background-color: var(--pop-blue) !important; color: #fff !important; }
+.bg-success { background-color: var(--pop-teal) !important; color: #fff !important; }
+.bg-danger { background-color: var(--pop-red) !important; color: #fff !important; }
+.bg-warning { background-color: var(--pop-yellow) !important; color: #0f172a !important; }
+.bg-info { background-color: var(--pop-cyan) !important; color: #fff !important; }
+
+/* Admin Nav Tabs & Pills */
+.nav-tabs,
+.nav-pills {
+  border-bottom: var(--pop-border) !important;
+  gap: 6px;
+  padding-bottom: 6px;
+}
+
+.nav-tabs .nav-link,
+.nav-pills .nav-link {
+  border: var(--pop-border-thin) !important;
+  border-radius: var(--pop-radius-md) !important;
+  font-weight: 700 !important;
+  padding: 8px 16px !important;
+  background-color: #ffffff;
+}
+
+.nav-tabs .nav-link.active,
+.nav-pills .nav-link.active {
+  background-color: var(--pop-blue) !important;
+  color: #ffffff !important;
+  box-shadow: var(--pop-shadow-sm) !important;
+}
