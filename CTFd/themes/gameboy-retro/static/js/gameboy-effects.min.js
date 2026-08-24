@@ -200,8 +200,33 @@
   /* --------------------------------------------------------------------------
      FIRST BLOOD CELEBRATION TOAST & SPARKLE BANNER
      -------------------------------------------------------------------------- */
+  const seenFirstBloodKeys = new Set();
+
   function showFirstBloodBanner(data) {
     if (!data) data = {};
+
+    let solver = data.solver;
+    let challenge = data.challenge;
+    if (!solver && data.content && data.content.includes(' baru saja')) {
+      solver = data.content.split(' baru saja')[0].trim();
+    }
+    if (!challenge && data.title && data.title.includes('//')) {
+      challenge = data.title.split('//')[1].trim();
+    }
+    if (!solver) solver = data.title ? data.title.split('//')[0].trim() : 'Seseorang';
+    if (!challenge) challenge = data.title || 'Tantangan';
+
+    const dedupeKey = `${solver}_${challenge}`.toLowerCase().trim();
+    const now = Date.now();
+    
+    // Check if this First Blood was already shown recently (cooldown of 45 seconds)
+    if (seenFirstBloodKeys.has(dedupeKey)) {
+      return;
+    }
+    seenFirstBloodKeys.add(dedupeKey);
+    setTimeout(() => seenFirstBloodKeys.delete(dedupeKey), 45000);
+
+    // Play fanfare once
     playFirstBloodFanfare();
 
     let container = document.getElementById('first-blood-container');
@@ -215,23 +240,16 @@
       }
     }
 
-    let solver = data.solver;
-    let challenge = data.challenge;
-    if (!solver && data.content && data.content.includes(' baru saja')) {
-      solver = data.content.split(' baru saja')[0].trim();
+    // Remove any existing active banner so they never stack awkwardly
+    const existing = container.querySelector('.first-blood-banner');
+    if (existing) {
+      existing.remove();
     }
-    if (!challenge && data.title && data.title.includes('//')) {
-      challenge = data.title.split('//')[1].trim();
-    }
-    if (!solver) solver = data.title ? data.title.split('//')[0].trim() : 'Seseorang';
-    if (!challenge) challenge = data.title || 'Tantangan';
 
     const category = data.category || 'CTF';
     const points = data.value ? `+${data.value} PTS` : '';
 
-    console.log('[+] First Blood Celebration Activated for:', solver, challenge);
-
-    const bannerId = 'fb-' + Date.now();
+    const bannerId = 'fb-' + now;
     const bannerHtml = `
       <div class="first-blood-banner" id="${bannerId}">
         <div class="fb-badge-tag">
@@ -252,14 +270,14 @@
     el.innerHTML = bannerHtml;
     container.appendChild(el.firstElementChild);
 
-    // Auto remove after 7 seconds
+    // Auto remove after 6.5 seconds
     setTimeout(() => {
       const banner = document.getElementById(bannerId);
       if (banner) {
         banner.classList.add('fb-fade-out');
-        setTimeout(() => banner.remove(), 400);
+        setTimeout(() => banner.remove(), 350);
       }
-    }, 7000);
+    }, 6500);
   }
 
   window.showFirstBloodBanner = showFirstBloodBanner;
@@ -637,6 +655,8 @@
   }
 
   // Fallback Polling & Auto-Refresh for Challenges / Scoreboard
+  let notifsInitialized = false;
+
   async function pollLiveTelemetry() {
     try {
       const urlRoot = window.init && window.init.urlRoot ? window.init.urlRoot : '';
@@ -647,15 +667,24 @@
       });
       const data = await res.json();
       if (data && data.data && Array.isArray(data.data)) {
-        data.data.forEach(n => {
-          if (n.id > lastProcessedNotifId) {
-            lastProcessedNotifId = n.id;
-            localStorage.setItem('cca_last_notif_id', String(n.id));
-            if (n.type === 'first_blood' || (n.title && n.title.includes('FIRST BLOOD'))) {
-              showFirstBloodBanner(n);
+        if (!notifsInitialized) {
+          // Record current maximum ID on first run so past notifications are not replayed
+          data.data.forEach(n => {
+            if (n.id > lastProcessedNotifId) lastProcessedNotifId = n.id;
+          });
+          localStorage.setItem('cca_last_notif_id', String(lastProcessedNotifId));
+          notifsInitialized = true;
+        } else {
+          data.data.forEach(n => {
+            if (n.id > lastProcessedNotifId) {
+              lastProcessedNotifId = n.id;
+              localStorage.setItem('cca_last_notif_id', String(n.id));
+              if (n.type === 'first_blood' || (n.title && n.title.includes('FIRST BLOOD'))) {
+                showFirstBloodBanner(n);
+              }
             }
-          }
-        });
+          });
+        }
       }
 
       // 2. Auto-sync Challenges if on /challenges
