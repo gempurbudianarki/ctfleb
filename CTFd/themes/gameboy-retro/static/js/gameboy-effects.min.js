@@ -642,15 +642,28 @@
   }
 
   function hookCTFdEvents() {
-    if (window.CTFd && window.CTFd.events && window.CTFd.events.controller) {
-      const c = window.CTFd.events.controller;
-      if (!c._fbAttached) {
-        c._fbAttached = true;
-        c.on('notification', (data) => {
+    if (window.CTFd && window.CTFd._functions && window.CTFd._functions.events) {
+      const ev = window.CTFd._functions.events;
+      if (!ev._fbAttached) {
+        ev._fbAttached = true;
+        
+        const origAlert = ev.eventAlert;
+        ev.eventAlert = function(data) {
           if (data && (data.type === 'first_blood' || (data.title && data.title.includes('FIRST BLOOD')))) {
             showFirstBloodBanner(data);
+            return;
           }
-        });
+          if (typeof origAlert === 'function') origAlert(data);
+        };
+
+        const origToast = ev.eventToast;
+        ev.eventToast = function(data) {
+          if (data && (data.type === 'first_blood' || (data.title && data.title.includes('FIRST BLOOD')))) {
+            showFirstBloodBanner(data);
+            return;
+          }
+          if (typeof origToast === 'function') origToast(data);
+        };
       }
     }
   }
