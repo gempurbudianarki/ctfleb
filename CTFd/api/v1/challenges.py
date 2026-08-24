@@ -2,7 +2,7 @@ import math
 from datetime import datetime, timedelta
 from typing import List  # noqa: I001
 
-from flask import abort, render_template, request, session, url_for
+from flask import abort, current_app, render_template, request, session, url_for
 from flask_restx import Namespace, Resource
 from sqlalchemy.sql import and_
 
@@ -931,6 +931,25 @@ class ChallengeAttempt(Resource):
 
                         clear_standings()
                         clear_challenges()
+
+                        # First Blood Real-time Broadcast
+                        try:
+                            total_solves = Solves.query.filter_by(challenge_id=challenge.id).count()
+                            if total_solves == 1:
+                                solver_name = team.name if (config.is_teams_mode() and team) else user.name
+                                fb_data = {
+                                    "title": f"FIRST BLOOD // {challenge.name}",
+                                    "content": f"{solver_name} baru saja merebut FIRST BLOOD pada soal {challenge.name} (+{challenge.value} PTS)!",
+                                    "type": "first_blood",
+                                    "solver": solver_name,
+                                    "challenge": challenge.name,
+                                    "category": challenge.category,
+                                    "value": challenge.value,
+                                    "sound": True,
+                                }
+                                current_app.events_manager.publish(data=fb_data, type="notification")
+                        except Exception as fb_err:
+                            pass
 
                     log(
                         "submissions",

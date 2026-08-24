@@ -153,9 +153,110 @@
     return bgmPlaying;
   }
 
+  /* --------------------------------------------------------------------------
+     FIRST BLOOD VICTORY FANFARE (RETRO SYNTH CHIPTUNE)
+     -------------------------------------------------------------------------- */
+  function playFirstBloodFanfare() {
+    if (!soundEnabled) return;
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') ctx.resume();
+
+    const now = ctx.currentTime + 0.05;
+    
+    // Triumphant Victory Chime: C5, E5, G5, C6 (pause) -> G5, C6 + E6 chord
+    const notes = [
+      { f: 523.25, t: 0.00, d: 0.12, type: 'triangle' }, // C5
+      { f: 659.25, t: 0.12, d: 0.12, type: 'triangle' }, // E5
+      { f: 783.99, t: 0.24, d: 0.12, type: 'triangle' }, // G5
+      { f: 1046.50, t: 0.36, d: 0.30, type: 'triangle' }, // C6
+      { f: 783.99, t: 0.70, d: 0.12, type: 'triangle' }, // G5
+      { f: 1046.50, t: 0.82, d: 0.65, type: 'triangle' }, // C6 (triumph finale)
+      { f: 1318.51, t: 0.82, d: 0.65, type: 'sine' }      // E6 (harmonizer)
+    ];
+
+    notes.forEach(n => {
+      try {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = n.type || 'triangle';
+        osc.frequency.setValueAtTime(n.f, now + n.t);
+        
+        gain.gain.setValueAtTime(0.20, now + n.t);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + n.t + n.d);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now + n.t);
+        osc.stop(now + n.t + n.d);
+      } catch (e) {}
+    });
+  }
+
+  /* --------------------------------------------------------------------------
+     FIRST BLOOD CELEBRATION TOAST & SPARKLE BANNER
+     -------------------------------------------------------------------------- */
+  function showFirstBloodBanner(data) {
+    playFirstBloodFanfare();
+
+    let container = document.getElementById('first-blood-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'first-blood-container';
+      document.body.appendChild(container);
+    }
+
+    const solver = data.solver || (data.title ? data.title.split('//')[0].trim() : 'Seseorang');
+    const challenge = data.challenge || data.title || 'Tantangan';
+    const category = data.category || 'CTF';
+    const points = data.value ? `+${data.value} PTS` : '';
+
+    const bannerId = 'fb-' + Date.now();
+    const bannerHtml = `
+      <div class="first-blood-banner" id="${bannerId}">
+        <div class="fb-badge-tag">
+          <i class="fas fa-crown text-warning me-1"></i> FIRST BLOOD // PENAKLUK PERDANA
+        </div>
+        <div class="fb-title-text">
+          <span class="fb-solver-name"><i class="fas fa-user-ninja me-1 text-danger"></i>${solver}</span>
+          <span class="fb-action-text">baru saja merebut</span>
+          <span class="fb-chal-name">${challenge}</span>
+          ${points ? `<span class="badge bg-warning text-dark fb-pts-badge">${points}</span>` : ''}
+        </div>
+        <div class="fb-category-tag"><i class="fas fa-layer-group me-1"></i> Kategori: <strong>${category.toUpperCase()}</strong></div>
+        <button type="button" class="fb-close-btn" onclick="document.getElementById('${bannerId}').remove()">&times;</button>
+      </div>
+    `;
+
+    const el = document.createElement('div');
+    el.innerHTML = bannerHtml;
+    container.appendChild(el.firstElementChild);
+
+    // Auto remove after 7 seconds
+    setTimeout(() => {
+      const banner = document.getElementById(bannerId);
+      if (banner) {
+        banner.classList.add('fb-fade-out');
+        setTimeout(() => banner.remove(), 400);
+      }
+    }, 7000);
+  }
+
+  window.showFirstBloodBanner = showFirstBloodBanner;
+  window.triggerTestFirstBlood = function(solver, chal, cat, pts) {
+    showFirstBloodBanner({
+      solver: solver || 'AcehCyberNinja',
+      challenge: chal || 'Small Exponent RSA Attack',
+      category: cat || 'Crypto',
+      value: pts || 300
+    });
+  };
+
   // Expose global methods
   window.GameBoyAudio = {
     playBlip: playBlip,
+    playFirstBloodFanfare: playFirstBloodFanfare,
     toggleSound: toggleSound,
     toggleBGM: toggleBGM,
     isSoundEnabled: function () { return soundEnabled; },
@@ -481,7 +582,22 @@
     };
   };
 
+  function hookCTFdEvents() {
+    if (window.CTFd && window.CTFd.events && window.CTFd.events.controller) {
+      const c = window.CTFd.events.controller;
+      if (!c._fbAttached) {
+        c._fbAttached = true;
+        c.on('notification', (data) => {
+          if (data && (data.type === 'first_blood' || (data.title && data.title.includes('FIRST BLOOD')))) {
+            showFirstBloodBanner(data);
+          }
+        });
+      }
+    }
+  }
+
   setInterval(patchCTFdDialogs, 250);
+  setInterval(hookCTFdEvents, 300);
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAudioListeners);
