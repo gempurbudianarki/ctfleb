@@ -1086,3 +1086,41 @@ body {
   height: auto !important;
   line-height: 1.5 !important;
 }
+
+/* ==========================================================================
+   9. DROPDOWNS & SCROLLBAR OPTIMIZATION
+   ========================================================================== */
+.language-dropdown-menu {
+  max-height: 320px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  border-radius: var(--pop-radius-md) !important;
+  border: var(--pop-border-thin) !important;
+  box-shadow: var(--pop-shadow-md) !important;
+}
+
+.language-dropdown-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.language-dropdown-menu::-webkit-scrollbar-track {
+  background: var(--canvas-subtle);
+  border-radius: 4px;
+}
+
+.language-dropdown-menu::-webkit-scrollbar-thumb {
+  background: var(--pop-blue);
+  border-radius: 4px;
+}
+
+.language-dropdown-menu .dropdown-item {
+  cursor: pointer !important;
+  transition: all 0.15s ease-in-out;
+}
+
+.language-dropdown-menu .dropdown-item:hover {
+  background-color: var(--card-hover-bg) !important;
+  color: var(--pop-blue) !important;
+  padding-left: 20px !important;
+}
+
