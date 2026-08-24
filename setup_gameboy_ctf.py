@@ -11,8 +11,9 @@ with app.app_context():
     print("[*] Initializing CTFd with Retro Game Boy configuration...")
     
     # 1. CTF General Config
-    set_config("ctf_name", "RETRO GAME BOY CTF")
-    set_config("ctf_description", "Monochrome 8-Bit Cyber Security Competition")
+    set_config("ctf_name", "CYBERSECURITY COMMUNITY OF ACEH")
+    set_config("ctf_description", "Organized by Cybersecurity Community of Aceh (CCA)")
+    set_config("ctf_logo", "img/logo_cca.png")
     set_config("user_mode", "users")
     set_config("ctf_theme", "gameboy-retro")
     set_config("theme_header", "")
@@ -44,33 +45,57 @@ with app.app_context():
 
     # 4. Create Home Index Page
     page = Pages.query.filter_by(route="index").first()
-    index_html = """
-<div class="row justify-content-center">
-  <div class="col-md-10 text-center py-4">
-    <div class="arcade-monitor-frame mb-4">
-      <div class="monitor-header">
-        <span class="monitor-dot"></span>
-        <span class="monitor-title">SYSTEM READY // INSERT COIN</span>
-        <span class="monitor-dot"></span>
-      </div>
-      <div class="py-4">
-        <h1 style="font-size: 32px; letter-spacing: 4px; margin-bottom: 20px;">★ GAME BOY CTF 1989 ★</h1>
-        <p style="font-size: 24px; color: var(--gb-darkest); max-width: 700px; margin: 0 auto 24px;">
-          WELCOME TO THE 8-BIT MONOCHROME CYBER ARENA. CHOOSE YOUR CHALLENGES, SUBMIT FLAGS, AND CLIMB TO THE TOP OF THE HIGH SCORES!
-        </p>
-        <div class="d-flex justify-content-center gap-3 flex-wrap">
-          <a href="/challenges" class="btn btn-primary" style="font-size: 14px; padding: 14px 24px;">
-            ▶ START GAME
-          </a>
-          <a href="/scoreboard" class="btn btn-outline-primary" style="font-size: 14px; padding: 14px 24px;">
-            ★ HIGH SCORES
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
+    index_html = """<div class="row justify-content-center">
+<div class="col-lg-10 col-md-12 text-center py-2">
+<div class="jumbotron py-5 px-4 mb-4">
+<div class="d-inline-flex align-items-center gap-2 mb-3 flex-wrap justify-content-center">
+<span class="badge" style="background: var(--pop-blue); color: #fff; font-size: 0.85rem; font-weight: 800; padding: 6px 16px; border-radius: 9999px; border: var(--pop-border-thin); box-shadow: var(--pop-shadow-sm);">🏛️ ORGANIZER: CCA</span>
+<span class="badge" style="background: var(--pop-pink); color: #fff; font-size: 0.85rem; font-weight: 800; padding: 6px 16px; border-radius: 9999px; border: var(--pop-border-thin); box-shadow: var(--pop-shadow-sm);">⚡ LIVE COMPETITION</span>
+<span class="badge" style="background: var(--pop-yellow); color: #12162a; font-size: 0.85rem; font-weight: 800; padding: 6px 16px; border-radius: 9999px; border: var(--pop-border-thin); box-shadow: var(--pop-shadow-sm);">🎮 NEO ARCADE</span>
 </div>
-"""
+<h1 class="display-4 fw-bold mb-2" style="font-family: var(--font-heading); color: var(--ink-dark); font-size: 2.8rem; letter-spacing: -1px;">
+CYBERSECURITY COMMUNITY OF ACEH
+</h1>
+<p class="lead mx-auto mb-4" style="max-width: 720px; font-size: 1.2rem; color: var(--ink-secondary); font-weight: 500;">
+Selamat datang di arena kompetisi CTF resmi diselenggarakan oleh <strong>Cybersecurity Community of Aceh (CCA)</strong>. Pecahkan tantangan, submit flag, dan buktikan keahlian siber Anda!
+</p>
+<div class="d-flex justify-content-center gap-3 flex-wrap">
+<a href="/challenges" class="btn btn-primary btn-lg px-4 py-3" style="border-radius: 12px; font-size: 1.05rem;"><i class="fas fa-play"></i> MULAI TANTANGAN (CHALLENGES)</a>
+<a href="/scoreboard" class="btn btn-outline-primary btn-lg px-4 py-3" style="border-radius: 12px; font-size: 1.05rem; background: #fff;"><i class="fas fa-trophy"></i> LEADERBOARD</a>
+</div>
+</div>
+
+<div class="row g-4 text-start">
+<div class="col-md-4">
+<div class="card h-100 p-4" style="border-left: 6px solid var(--cat-web);">
+<div class="d-flex align-items-center gap-3 mb-2">
+<div style="background: #e0e7ff; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin);"><i class="fas fa-globe" style="color: var(--cat-web); font-size: 1.25rem;"></i></div>
+<h4 class="mb-0 fw-bold">Web Exploitation</h4>
+</div>
+<p class="text-muted mb-0">Uji keamanan web, SQL injection, XSS, dan API hacking.</p>
+</div>
+</div>
+<div class="col-md-4">
+<div class="card h-100 p-4" style="border-left: 6px solid var(--cat-crypto);">
+<div class="d-flex align-items-center gap-3 mb-2">
+<div style="background: #ede9fe; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin);"><i class="fas fa-key" style="color: var(--cat-crypto); font-size: 1.25rem;"></i></div>
+<h4 class="mb-0 fw-bold">Cryptography</h4>
+</div>
+<p class="text-muted mb-0">Pecahkan cipher klasik hingga modern cryptography.</p>
+</div>
+</div>
+<div class="col-md-4">
+<div class="card h-100 p-4" style="border-left: 6px solid var(--cat-reverse);">
+<div class="d-flex align-items-center gap-3 mb-2">
+<div style="background: #fce7f3; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: var(--pop-border-thin);"><i class="fas fa-microchip" style="color: var(--cat-reverse); font-size: 1.25rem;"></i></div>
+<h4 class="mb-0 fw-bold">Reverse Engineering</h4>
+</div>
+<p class="text-muted mb-0">Bongkar binary, assembly code, dan logic target.</p>
+</div>
+</div>
+</div>
+</div>
+</div>"""
     if not page:
         page = Pages(title="Home", route="index", content=index_html, draft=False)
         db.session.add(page)
