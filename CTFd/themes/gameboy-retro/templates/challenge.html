@@ -107,21 +107,40 @@
               <div class="challenge-hints hint-row row">
                 <div class="col-12 mb-3">
                 {% for hint in hints | sort(attribute="cost") %}
-                  <div x-data="Hint" x-init="id = {{ hint.id }}">
+                  <div x-data="CyberHint({{ hint.id }}, {{ hint.cost }}, {{ (hint.title or '') | tojson }})" class="mb-2">
                     {% if hint.content %}
-                    <details>
-                      <summary>{% trans %}View Hint{% endtrans %}{% if hint.title %}: {{ hint.title }}{% endif %}</summary>
-                      <div>{{ hint.html | safe }}</div>
-                    </details>
+                      <div class="card p-3" style="border: var(--pop-border-thin); border-radius: 12px; background: var(--canvas-subtle);">
+                        <div class="d-flex align-items-center gap-2 mb-1 fw-bold" style="color: var(--pop-blue);">
+                          <i class="fas fa-lightbulb"></i>
+                          <span>{% trans %}Hint{% endtrans %}{% if hint.title %}: {{ hint.title }}{% endif %}</span>
+                        </div>
+                        <div class="mt-2">{{ hint.html | safe }}</div>
+                      </div>
                     {% else %}
-                    <details @toggle="showHint(event)">
-                      {% if hint.title %}
-                      <summary>{{ hint.title }} (Cost: {{ hint.cost }} point{{ hint.cost|pluralize }})</summary>
-                      {% else %}
-                      <summary>Unlock Hint for {{ hint.cost }} point{{ hint.cost|pluralize }}</summary>
-                      {% endif %}
-                      <div x-html="html"></div>
-                    </details>
+                      <template x-if="unlockedHtml">
+                        <div class="card p-3" style="border: var(--pop-border-thin); border-radius: 12px; background: var(--canvas-subtle);">
+                          <div class="d-flex align-items-center gap-2 mb-1 fw-bold" style="color: var(--pop-blue);">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>{% trans %}Hint{% endtrans %}: <span x-text="title || 'Petunjuk'"></span></span>
+                          </div>
+                          <div class="mt-2" x-html="unlockedHtml"></div>
+                        </div>
+                      </template>
+                      <template x-if="!unlockedHtml">
+                        <button 
+                          type="button" 
+                          class="btn btn-outline-warning w-100 py-2 px-3 d-flex align-items-center justify-content-between text-start"
+                          @click="unlock()"
+                          :disabled="loading"
+                          style="border-radius: 12px; border: var(--pop-border-thin) !important; font-weight: 700; background: var(--card-bg);"
+                        >
+                          <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-lock text-warning"></i>
+                            <span x-text="title ? ('Petunjuk: ' + title) : 'Buka Kunci Petunjuk (Hint)'"></span>
+                          </div>
+                          <span class="badge bg-warning text-dark px-2 py-1" style="font-size: 0.8rem; font-weight: 800;" x-text="cost > 0 ? (cost + ' PTS') : 'GRATIS'"></span>
+                        </button>
+                      </template>
                     {% endif %}
                   </div>
                 {% endfor %}

@@ -395,6 +395,94 @@
     }
   }
 
+  /* --------------------------------------------------------------------------
+     ALPINE CYBER HINT COMPONENT
+     -------------------------------------------------------------------------- */
+  window.CyberHint = function(id, cost, title) {
+    return {
+      id: id,
+      cost: cost || 0,
+      title: title || '',
+      unlockedHtml: null,
+      loading: false,
+      async unlock() {
+        if (this.loading) return;
+        const confirmed = await window.showCyberConfirm({
+          title: this.title ? `Petunjuk: ${this.title}` : 'Buka Kunci Petunjuk',
+          text: 'Apakah Anda yakin ingin membuka petunjuk untuk tantangan ini?',
+          highlight: this.cost > 0 
+            ? `⚠️ Poin Anda akan dikurangi sebesar <strong>${this.cost} PTS</strong>.` 
+            : '✨ Petunjuk ini gratis (0 PTS).',
+          confirmText: this.cost > 0 ? `Buka (-${this.cost} PTS)` : 'Buka Sekarang',
+          cancelText: 'Batal',
+          icon: '💡'
+        });
+
+        if (!confirmed) return;
+
+        this.loading = true;
+        try {
+          // Check if already unlocked
+          const checkRes = await fetch(`${window.init ? window.init.urlRoot : ''}/api/v1/hints/${this.id}`, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'CSRF-Token': window.init ? window.init.csrfNonce : ''
+            }
+          });
+          const checkData = await checkRes.json();
+          if (checkData.data && (checkData.data.content || checkData.data.html)) {
+            this.unlockedHtml = checkData.data.html || checkData.data.content;
+            this.loading = false;
+            return;
+          }
+
+          // Request unlock
+          const unlockRes = await fetch(`${window.init ? window.init.urlRoot : ''}/api/v1/unlocks`, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'CSRF-Token': window.init ? window.init.csrfNonce : ''
+            },
+            body: JSON.stringify({ target: this.id, type: 'hints' })
+          });
+          const unlockData = await unlockRes.json();
+
+          if (unlockData.success) {
+            const hintRes = await fetch(`${window.init ? window.init.urlRoot : ''}/api/v1/hints/${this.id}`, {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'CSRF-Token': window.init ? window.init.csrfNonce : ''
+              }
+            });
+            const hintData = await hintRes.json();
+            if (hintData.data) {
+              this.unlockedHtml = hintData.data.html || hintData.data.content;
+            }
+          } else {
+            const errors = [];
+            if (unlockData.errors) {
+              Object.keys(unlockData.errors).forEach(k => errors.push(unlockData.errors[k]));
+            }
+            const msg = errors.length > 0 ? errors.join('<br>') : 'Gagal membuka petunjuk. Pastikan poin Anda mencukupi!';
+            window.showCyberAlert({
+              title: 'Gagal Membuka Petunjuk',
+              text: msg,
+              buttonText: 'Mengerti',
+              icon: '❌'
+            });
+          }
+        } catch (e) {
+          console.error(e);
+        } finally {
+          this.loading = false;
+        }
+      }
+    };
+  };
+
   setInterval(patchCTFdDialogs, 250);
 
   if (document.readyState === 'loading') {
