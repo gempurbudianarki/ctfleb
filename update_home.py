@@ -150,7 +150,7 @@ with app.app_context():
   </div>
 </div>"""
     
-    p = Pages(title='Home', route='index', content=advanced_html, draft=False)
+    p = Pages(title='Home', route='index', content=advanced_html, draft=False, format='html')
     db.session.add(p)
     db.session.commit()
     clear_pages()

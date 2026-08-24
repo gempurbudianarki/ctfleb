@@ -188,10 +188,11 @@ with app.app_context():
   </div>
 </div>"""
     if not page:
-        page = Pages(title="Home", route="index", content=index_html, draft=False)
+        page = Pages(title="Home", route="index", content=index_html, draft=False, format="html")
         db.session.add(page)
     else:
         page.content = index_html
+        page.format = "html"
     db.session.commit()
     print("[+] Configured Index Page.")
 
