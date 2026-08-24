@@ -3,8 +3,11 @@
 {% block content %}
   <div class="jumbotron challenges-header">
     <div class="container text-center">
-      <div class="d-inline-flex align-items-center gap-2 mb-2">
+      <div class="d-inline-flex align-items-center gap-2 mb-2 flex-wrap justify-content-center">
         <span class="badge" style="background: var(--pop-blue); color: #fff; font-size: 0.85rem; font-weight: 800; padding: 6px 14px; border-radius: 9999px; border: var(--pop-border-thin);"><i class="fas fa-terminal me-1"></i> MISSION CONTROL</span>
+        <button type="button" class="btn btn-sm" onclick="window.triggerTestFirstBlood('AcehCyberWarrior', 'Small Exponent RSA Attack', 'Crypto', 350)" style="background: var(--pop-yellow); color: #12162a; font-weight: 800; font-size: 0.8rem; border-radius: 9999px; border: var(--pop-border-thin); box-shadow: var(--pop-shadow-sm); cursor: pointer;">
+          <i class="fas fa-bolt text-danger me-1"></i> TEST LIVE FIRST BLOOD
+        </button>
       </div>
       <h1 class="challenges-title mb-2">
         {% trans %}CHALLENGES{% endtrans %}

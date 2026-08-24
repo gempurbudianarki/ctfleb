@@ -157,60 +157,70 @@
      FIRST BLOOD VICTORY FANFARE (RETRO SYNTH CHIPTUNE)
      -------------------------------------------------------------------------- */
   function playFirstBloodFanfare() {
-    if (!soundEnabled) return;
-    const ctx = getAudioContext();
-    if (!ctx) return;
-    if (ctx.state === 'suspended') ctx.resume();
+    try {
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
 
-    const now = ctx.currentTime + 0.05;
-    
-    // Triumphant Victory Chime: C5, E5, G5, C6 (pause) -> G5, C6 + E6 chord
-    const notes = [
-      { f: 523.25, t: 0.00, d: 0.12, type: 'triangle' }, // C5
-      { f: 659.25, t: 0.12, d: 0.12, type: 'triangle' }, // E5
-      { f: 783.99, t: 0.24, d: 0.12, type: 'triangle' }, // G5
-      { f: 1046.50, t: 0.36, d: 0.30, type: 'triangle' }, // C6
-      { f: 783.99, t: 0.70, d: 0.12, type: 'triangle' }, // G5
-      { f: 1046.50, t: 0.82, d: 0.65, type: 'triangle' }, // C6 (triumph finale)
-      { f: 1318.51, t: 0.82, d: 0.65, type: 'sine' }      // E6 (harmonizer)
-    ];
+      const now = ctx.currentTime + 0.05;
+      
+      // Triumphant Victory Chime: C5, E5, G5, C6 (pause) -> G5, C6 + E6 chord
+      const notes = [
+        { f: 523.25, t: 0.00, d: 0.12, type: 'triangle' }, // C5
+        { f: 659.25, t: 0.12, d: 0.12, type: 'triangle' }, // E5
+        { f: 783.99, t: 0.24, d: 0.12, type: 'triangle' }, // G5
+        { f: 1046.50, t: 0.36, d: 0.30, type: 'triangle' }, // C6
+        { f: 783.99, t: 0.70, d: 0.12, type: 'triangle' }, // G5
+        { f: 1046.50, t: 0.82, d: 0.65, type: 'triangle' }, // C6 (triumph finale)
+        { f: 1318.51, t: 0.82, d: 0.65, type: 'sine' }      // E6 (harmonizer)
+      ];
 
-    notes.forEach(n => {
-      try {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = n.type || 'triangle';
-        osc.frequency.setValueAtTime(n.f, now + n.t);
-        
-        gain.gain.setValueAtTime(0.20, now + n.t);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + n.t + n.d);
+      notes.forEach(n => {
+        try {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = n.type || 'triangle';
+          osc.frequency.setValueAtTime(n.f, now + n.t);
+          
+          gain.gain.setValueAtTime(0.25, now + n.t);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + n.t + n.d);
 
-        osc.connect(gain);
-        gain.connect(ctx.destination);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
 
-        osc.start(now + n.t);
-        osc.stop(now + n.t + n.d);
-      } catch (e) {}
-    });
+          osc.start(now + n.t);
+          osc.stop(now + n.t + n.d);
+        } catch (e) {}
+      });
+    } catch (e) {}
   }
 
   /* --------------------------------------------------------------------------
      FIRST BLOOD CELEBRATION TOAST & SPARKLE BANNER
      -------------------------------------------------------------------------- */
   function showFirstBloodBanner(data) {
+    if (!data) data = {};
     playFirstBloodFanfare();
 
     let container = document.getElementById('first-blood-container');
     if (!container) {
       container = document.createElement('div');
       container.id = 'first-blood-container';
-      document.body.appendChild(container);
+      if (document.body) {
+        document.body.appendChild(container);
+      } else {
+        document.documentElement.appendChild(container);
+      }
     }
 
     const solver = data.solver || (data.title ? data.title.split('//')[0].trim() : 'Seseorang');
     const challenge = data.challenge || data.title || 'Tantangan';
     const category = data.category || 'CTF';
     const points = data.value ? `+${data.value} PTS` : '';
+
+    console.log('[+] First Blood Celebration Activated for:', solver, challenge);
 
     const bannerId = 'fb-' + Date.now();
     const bannerHtml = `
