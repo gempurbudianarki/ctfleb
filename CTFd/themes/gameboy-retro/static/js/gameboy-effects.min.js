@@ -215,8 +215,17 @@
       }
     }
 
-    const solver = data.solver || (data.title ? data.title.split('//')[0].trim() : 'Seseorang');
-    const challenge = data.challenge || data.title || 'Tantangan';
+    let solver = data.solver;
+    let challenge = data.challenge;
+    if (!solver && data.content && data.content.includes(' baru saja')) {
+      solver = data.content.split(' baru saja')[0].trim();
+    }
+    if (!challenge && data.title && data.title.includes('//')) {
+      challenge = data.title.split('//')[1].trim();
+    }
+    if (!solver) solver = data.title ? data.title.split('//')[0].trim() : 'Seseorang';
+    if (!challenge) challenge = data.title || 'Tantangan';
+
     const category = data.category || 'CTF';
     const points = data.value ? `+${data.value} PTS` : '';
 

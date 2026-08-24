@@ -23,6 +23,7 @@ from CTFd.models import (
     Flags,
     Hints,
     HintUnlocks,
+    Notifications,
     Ratings,
     Solves,
     Submissions,
@@ -932,11 +933,13 @@ class ChallengeAttempt(Resource):
                         clear_standings()
                         clear_challenges()
 
-                        # First Blood Real-time Broadcast
+                        # First Blood Real-time Broadcast & Persistence
+                        is_first_blood = False
+                        solver_name = team.name if (config.is_teams_mode() and team) else user.name
                         try:
                             total_solves = Solves.query.filter_by(challenge_id=challenge.id).count()
                             if total_solves == 1:
-                                solver_name = team.name if (config.is_teams_mode() and team) else user.name
+                                is_first_blood = True
                                 fb_data = {
                                     "title": f"FIRST BLOOD // {challenge.name}",
                                     "content": f"{solver_name} baru saja merebut FIRST BLOOD pada soal {challenge.name} (+{challenge.value} PTS)!",
@@ -947,6 +950,15 @@ class ChallengeAttempt(Resource):
                                     "value": challenge.value,
                                     "sound": True,
                                 }
+                                # Save to DB so background poller / notifications API receives it
+                                fb_notif = Notifications(
+                                    title=f"FIRST BLOOD // {challenge.name}",
+                                    content=f"{solver_name} baru saja merebut FIRST BLOOD pada soal {challenge.name} (+{challenge.value} PTS)!"
+                                )
+                                db.session.add(fb_notif)
+                                db.session.commit()
+
+                                # Publish to SSE
                                 current_app.events_manager.publish(data=fb_data, type="notification")
                         except Exception as fb_err:
                             pass
@@ -961,7 +973,15 @@ class ChallengeAttempt(Resource):
                     )
                     return {
                         "success": True,
-                        "data": {"status": "correct", "message": message},
+                        "data": {
+                            "status": "correct",
+                            "message": message,
+                            "first_blood": is_first_blood,
+                            "solver_name": solver_name,
+                            "challenge_name": challenge.name,
+                            "challenge_category": challenge.category,
+                            "challenge_value": challenge.value,
+                        },
                     }
                 elif status == "partial":
                     # The challenge plugin says that the input is a partial solve
