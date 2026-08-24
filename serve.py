@@ -10,6 +10,9 @@ parser.add_argument(
     help="Disable importing gevent and monkey patching",
     action="store_false",
 )
+parser.add_argument(
+    "--debug", help="Enable debug mode and file watcher reloader", action="store_true"
+)
 args = parser.parse_args()
 if args.disable_gevent:
     print(" * Importing gevent and monkey patching. Use --disable-gevent to disable.")
@@ -21,6 +24,7 @@ if args.disable_gevent:
 from CTFd import create_app
 
 app = create_app()
+app.config["SERVER_SENT_EVENTS"] = False
 
 if args.profile:
     from flask_debugtoolbar import DebugToolbarExtension
@@ -40,4 +44,4 @@ if args.profile:
     toolbar.init_app(app)
     print(" * Flask profiling running at http://127.0.0.1:4000/flask-profiler/")
 
-app.run(debug=True, threaded=True, host="127.0.0.1", port=args.port)
+app.run(debug=args.debug, threaded=True, host="127.0.0.1", port=args.port)

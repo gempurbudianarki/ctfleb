@@ -1,0 +1,1088 @@
+/* ==========================================================================
+   VIBRANT NEO-ARCADE & POP CYBER THEME FOR CTFd
+   Seamless Light Mode & Dark Mode Support
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   LIGHT MODE TOKENS (DEFAULT)
+   -------------------------------------------------------------------------- */
+:root,
+[data-bs-theme="light"] {
+  /* Canvas & Neutral Ink */
+  --canvas-bg: #f8fafc;
+  --canvas-subtle: #f1f5f9;
+  --card-bg: #ffffff;
+  --card-hover-bg: #f8faff;
+  --ink-dark: #0f172a;
+  --ink-secondary: #334155;
+  --ink-muted: #475569;
+  --ink-light: #64748b;
+  --ink-white: #ffffff;
+  --navbar-bg: rgba(255, 255, 255, 0.95);
+  --jumbotron-bg: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
+  --modal-bg: #ffffff;
+  --input-bg: #ffffff;
+
+  /* Vibrant Pop Palette */
+  --pop-blue: #3b52d4;
+  --pop-blue-hover: #2d3eb0;
+  --pop-cyan: #0284c7;
+  --pop-pink: #ec4899;
+  --pop-purple: #7c3aed;
+  --pop-yellow: #f59e0b;
+  --pop-orange: #ea580c;
+  --pop-teal: #059669;
+  --pop-red: #dc2626;
+
+  /* Category Specific Accents */
+  --cat-web: #2563eb;
+  --cat-crypto: #7c3aed;
+  --cat-reverse: #db2777;
+  --cat-pwn: #dc2626;
+  --cat-forensics: #059669;
+  --cat-osint: #d97706;
+  --cat-misc: #0891b2;
+
+  /* Typography */
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-label: 'Space Grotesk', sans-serif;
+
+  /* Geometry & Borders */
+  --pop-border: 2px solid #0f172a;
+  --pop-border-thin: 1.5px solid #0f172a;
+  --pop-radius-sm: 8px;
+  --pop-radius-md: 12px;
+  --pop-radius-lg: 16px;
+  --pop-radius-pill: 9999px;
+
+  /* Neo-Pop Isometric Shadows */
+  --pop-shadow-sm: 2px 2px 0px #0f172a;
+  --pop-shadow-md: 4px 4px 0px #0f172a;
+  --pop-shadow-lg: 6px 6px 0px #0f172a;
+  --pop-shadow-xl: 8px 8px 0px #0f172a;
+
+  /* Background Glow pattern */
+  --grid-dot-color: rgba(59, 82, 212, 0.08);
+
+  /* Bootstrap Variable Overrides */
+  --bs-body-bg: var(--canvas-bg);
+  --bs-body-color: var(--ink-dark);
+}
+
+/* --------------------------------------------------------------------------
+   DARK MODE TOKENS (HIGH-CONTRAST & CRISP)
+   -------------------------------------------------------------------------- */
+[data-bs-theme="dark"] {
+  --canvas-bg: #0b0f19;
+  --canvas-subtle: #151d30;
+  --card-bg: #111827;
+  --card-hover-bg: #1a233a;
+  --ink-dark: #f8fafc;
+  --ink-secondary: #cbd5e1;
+  --ink-muted: #94a3b8;
+  --ink-light: #64748b;
+  --ink-white: #ffffff;
+  --navbar-bg: rgba(17, 24, 39, 0.95);
+  --jumbotron-bg: linear-gradient(135deg, #111827 0%, #1e293b 100%);
+  --modal-bg: #111827;
+  --input-bg: #1f293d;
+
+  --pop-blue: #60a5fa;
+  --pop-blue-hover: #3b82f6;
+  --pop-cyan: #38bdf8;
+  --pop-pink: #f472b6;
+  --pop-purple: #a78bfa;
+  --pop-yellow: #fbbf24;
+  --pop-orange: #fb923c;
+  --pop-teal: #34d399;
+  --pop-red: #f87171;
+
+  --pop-border: 2px solid #334155;
+  --pop-border-thin: 1.5px solid #334155;
+
+  --pop-shadow-sm: 2px 2px 0px #000000;
+  --pop-shadow-md: 4px 4px 0px #000000;
+  --pop-shadow-lg: 6px 6px 0px #000000;
+  --pop-shadow-xl: 8px 8px 0px #000000;
+
+  --grid-dot-color: rgba(96, 165, 250, 0.12);
+
+  --bs-body-bg: var(--canvas-bg);
+  --bs-body-color: var(--ink-dark);
+}
+
+/* ==========================================================================
+   1. GLOBAL RESET & BASE TYPOGRAPHY
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  background-color: var(--canvas-bg) !important;
+  color: var(--ink-dark) !important;
+  font-family: var(--font-body) !important;
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  background-image: 
+    radial-gradient(circle at 1px 1px, var(--grid-dot-color) 1px, transparent 0),
+    radial-gradient(circle at 100% 0%, rgba(236, 72, 153, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 0% 100%, rgba(5, 150, 105, 0.04) 0%, transparent 40%);
+  background-size: 24px 24px, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+main[role="main"] {
+  flex: 1 0 auto;
+  padding-top: 90px;
+  padding-bottom: 50px;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-heading) !important;
+  font-weight: 800 !important;
+  color: var(--ink-dark) !important;
+  letter-spacing: -0.5px;
+  line-height: 1.25;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+h1, .h1 { font-size: 2.25rem; }
+h2, .h2 { font-size: 1.75rem; }
+h3, .h3 { font-size: 1.35rem; }
+h4, .h4 { font-size: 1.15rem; }
+h5, .h5 { font-size: 1rem; }
+
+p, span, div, td, th, li, label {
+  color: var(--ink-dark);
+}
+
+.text-muted,
+small.text-muted,
+p.text-muted,
+span.text-muted {
+  color: var(--ink-muted) !important;
+  font-weight: 500 !important;
+}
+
+.lead {
+  color: var(--ink-secondary) !important;
+  font-weight: 500 !important;
+}
+
+a {
+  color: var(--pop-blue) !important;
+  font-weight: 700;
+  text-decoration: none !important;
+  transition: all 0.15s ease;
+}
+
+a:hover {
+  color: var(--pop-pink) !important;
+}
+
+/* Selection */
+::selection {
+  background: var(--pop-yellow);
+  color: #0f172a;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--canvas-subtle);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--pop-blue);
+  border-radius: var(--pop-radius-pill);
+  border: 2px solid var(--canvas-subtle);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--pop-pink);
+}
+
+/* Code & Pre Blocks */
+pre, code, kbd, samp {
+  font-family: var(--font-mono) !important;
+  font-size: 0.9em;
+  background-color: var(--canvas-subtle);
+  color: #38bdf8;
+  border-radius: var(--pop-radius-sm);
+  padding: 3px 6px;
+  -webkit-font-smoothing: antialiased;
+}
+
+pre {
+  padding: 16px 20px !important;
+  border: var(--pop-border) !important;
+  box-shadow: var(--pop-shadow-sm) !important;
+  border-radius: var(--pop-radius-md) !important;
+  overflow-x: auto;
+  background-color: #0b0f19 !important;
+}
+
+pre code {
+  padding: 0 !important;
+  background: transparent !important;
+  color: #38bdf8;
+}
+
+/* ==========================================================================
+   2. FLOATING VIBRANT NAVBAR (COMPACT & UNCLIPPED)
+   ========================================================================== */
+
+.navbar {
+  background: var(--navbar-bg) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-bottom: var(--pop-border) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08) !important;
+  padding: 8px 16px !important;
+  z-index: 1030;
+}
+
+/* FORCE ALL NAVBAR LINKS TO HORIZONTAL INLINE-FLEX (NO STACKING) */
+.navbar .navbar-nav,
+.navbar-nav {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.navbar .nav-item,
+.navbar-nav .nav-item {
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.navbar .nav-link,
+.navbar-nav .nav-link,
+.nav-link,
+.nav-pill-item {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+  padding: 8px 14px !important;
+}
+
+.navbar .nav-link i,
+.navbar-nav .nav-link i,
+.nav-link i,
+.nav-pill-item i {
+  display: inline-block !important;
+  margin: 0 !important;
+  font-size: 0.95rem !important;
+  vertical-align: middle !important;
+}
+
+.navbar .nav-link span,
+.navbar-nav .nav-link span,
+.nav-link span,
+.nav-pill-item span {
+  display: inline-block !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+}
+
+.brand-main-text {
+  font-family: var(--font-heading) !important;
+  font-size: 0.98rem !important;
+  font-weight: 900 !important;
+  line-height: 1.1 !important;
+  color: var(--ink-dark) !important;
+  letter-spacing: 0.5px;
+}
+
+.brand-sub-text {
+  font-family: var(--font-body) !important;
+  font-size: 0.62rem !important;
+  font-weight: 750 !important;
+  color: var(--pop-blue) !important;
+  line-height: 1 !important;
+}
+
+/* --- Segmented Floating Pill Bar (Center) --- */
+.nav-pills-container {
+  background: var(--input-bg) !important;
+  border: var(--pop-border-thin) !important;
+  border-radius: var(--pop-radius-pill) !important;
+  padding: 3px 6px !important;
+  gap: 3px !important;
+  box-shadow: var(--pop-shadow-sm) !important;
+}
+
+.nav-pill-item {
+  font-family: var(--font-heading) !important;
+  font-size: 0.88rem !important;
+  font-weight: 750 !important;
+  color: var(--ink-dark) !important;
+  padding: 6px 14px !important;
+  border-radius: var(--pop-radius-pill) !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  transition: all 0.15s ease !important;
+}
+
+.nav-pill-item:hover {
+  background-color: var(--canvas-subtle) !important;
+  color: var(--pop-blue) !important;
+  transform: translateY(-1px);
+}
+
+.nav-pill-item.active {
+  background-color: var(--pop-blue) !important;
+  color: #ffffff !important;
+  box-shadow: var(--pop-shadow-sm) !important;
+}
+
+.nav-pill-item.active i {
+  color: #ffffff !important;
+}
+
+/* --- Admin Console Badge Button (Adaptive Light / Dark Contrast) --- */
+.admin-badge-btn {
+  font-family: var(--font-heading) !important;
+  font-size: 0.82rem !important;
+  font-weight: 800 !important;
+  background: rgba(37, 99, 235, 0.12) !important;
+  color: #1d4ed8 !important;
+  border: 1.5px solid #2563eb !important;
+  border-radius: var(--pop-radius-pill) !important;
+  padding: 5px 13px !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  white-space: nowrap !important;
+  box-shadow: var(--pop-shadow-sm) !important;
+  transition: all 0.15s ease !important;
+}
+
+.admin-badge-btn i {
+  color: #2563eb !important;
+}
+
+.admin-badge-btn:hover {
+  transform: translateY(-1px);
+  background: #2563eb !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+}
+
+.admin-badge-btn:hover i {
+  color: #ffffff !important;
+}
+
+/* Dark Mode Admin Badge */
+[data-bs-theme="dark"] .admin-badge-btn,
+body.dark-mode .admin-badge-btn {
+  background: rgba(56, 189, 248, 0.18) !important;
+  color: #38bdf8 !important;
+  border: 1.5px solid #38bdf8 !important;
+}
+
+[data-bs-theme="dark"] .admin-badge-btn i,
+body.dark-mode .admin-badge-btn i {
+  color: #38bdf8 !important;
+}
+
+[data-bs-theme="dark"] .admin-badge-btn:hover,
+body.dark-mode .admin-badge-btn:hover {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.5) !important;
+}
+
+[data-bs-theme="dark"] .admin-badge-btn:hover i,
+body.dark-mode .admin-badge-btn:hover i {
+  color: #ffffff !important;
+}
+
+/* --- User Profile Capsule --- */
+.user-profile-capsule {
+  font-family: var(--font-heading) !important;
+  font-size: 0.86rem !important;
+  font-weight: 800 !important;
+  background: var(--card-bg) !important;
+  color: var(--ink-dark) !important;
+  border: var(--pop-border-thin) !important;
+  border-radius: var(--pop-radius-pill) !important;
+  padding: 5px 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  cursor: pointer;
+  box-shadow: var(--pop-shadow-sm) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.user-profile-capsule:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--pop-shadow-md) !important;
+}
+
+/* --- Icon Round Utility Buttons --- */
+.icon-round-btn {
+  background: var(--card-bg) !important;
+  border: var(--pop-border-thin) !important;
+  border-radius: 50% !important;
+  width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--ink-dark) !important;
+  cursor: pointer;
+  box-shadow: var(--pop-shadow-sm) !important;
+  transition: transform 0.15s ease, color 0.15s ease !important;
+}
+
+.icon-round-btn:hover {
+  transform: translateY(-1px);
+  color: var(--pop-blue) !important;
+}
+
+/* --- Sound & BGM Toggle Buttons --- */
+.sound-toggle-btn,
+.bgm-toggle-btn {
+  font-family: var(--font-heading) !important;
+  font-size: 0.78rem !important;
+  font-weight: 850 !important;
+  color: #ffffff !important;
+  border: var(--pop-border-thin) !important;
+  border-radius: var(--pop-radius-pill) !important;
+  padding: 5px 11px !important;
+  box-shadow: var(--pop-shadow-sm) !important;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+}
+
+.sound-toggle-btn {
+  background: var(--pop-teal) !important;
+}
+
+.bgm-toggle-btn {
+  background: var(--pop-pink) !important;
+}
+
+.sound-toggle-btn:hover,
+.bgm-toggle-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--pop-shadow-md) !important;
+}
+
+/* ==========================================================================
+   3. BOUNCY 3D BUTTONS & PILLS
+   ========================================================================== */
+
+.btn {
+  font-family: var(--font-heading) !important;
+  font-size: 0.95rem !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.2px;
+  padding: 10px 20px !important;
+  border: var(--pop-border) !important;
+  border-radius: var(--pop-radius-md) !important;
+  box-shadow: var(--pop-shadow-md) !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+  text-decoration: none !important;
+}
+
+.btn:hover {
+  transform: translate(-2px, -2px) !important;
+  box-shadow: var(--pop-shadow-lg) !important;
+}
+
+.btn:active,
+.btn.active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 1px 1px 0px var(--ink-dark) !important;
+}
+
+.btn-primary {
+  background-color: var(--pop-blue) !important;
+  color: #ffffff !important;
+}
+.btn-primary:hover {
+  background-color: var(--pop-blue-hover) !important;
+  color: #ffffff !important;
+}
+
+.btn-success {
+  background-color: var(--pop-teal) !important;
+  color: #ffffff !important;
+}
+
+.btn-danger {
+  background-color: var(--pop-red) !important;
+  color: #ffffff !important;
+}
+
+.btn-warning {
+  background-color: var(--pop-yellow) !important;
+  color: #0f172a !important;
+}
+
+.btn-info {
+  background-color: var(--pop-cyan) !important;
+  color: #ffffff !important;
+}
+
+.btn-outline-primary {
+  background-color: var(--card-bg) !important;
+  color: var(--pop-blue) !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--pop-blue) !important;
+  color: #ffffff !important;
+}
+
+.btn-close {
+  background: var(--pop-red) !important;
+  color: var(--ink-white) !important;
+  border: var(--pop-border-thin) !important;
+  border-radius: var(--pop-radius-pill) !important;
+  width: 32px !important;
+  height: 32px !important;
+  opacity: 1 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--pop-shadow-sm) !important;
+}
+
+.btn-close::after {
+  content: "✕";
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.btn-close:hover {
+  transform: scale(1.1) rotate(90deg);
+}
+
+/* ==========================================================================
+   4. CARDS & HERO JUMBOTRON
+   ========================================================================== */
+
+.card {
+  background-color: var(--card-bg) !important;
+  border: var(--pop-border) !important;
+  border-radius: var(--pop-radius-lg) !important;
+  box-shadow: var(--pop-shadow-lg) !important;
+  margin-bottom: 24px;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--pop-shadow-xl) !important;
+}
+
+.card-header {
+  background-color: var(--canvas-subtle) !important;
+  border-bottom: var(--pop-border) !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 800 !important;
+  padding: 14px 20px !important;
+  color: var(--ink-dark) !important;
+}
+
+.card-body {
+  padding: 24px !important;
+}
+
+/* Vibrant Hero Banner / Jumbotron */
+.jumbotron {
+  background: var(--jumbotron-bg) !important;
+  border: var(--pop-border) !important;
+  border-radius: var(--pop-radius-lg) !important;
+  box-shadow: var(--pop-shadow-xl) !important;
+  padding: 40px 24px !important;
+  margin-bottom: 36px !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.jumbotron::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--pop-blue), var(--pop-pink), var(--pop-yellow), var(--pop-teal));
+}
+
+.scoreboard-title,
+.challenges-title {
+  font-size: 2.75rem !important;
+  font-weight: 900 !important;
+  letter-spacing: -1px;
+  color: var(--ink-dark) !important;
+  margin: 0 !important;
+}
+
+/* ==========================================================================
+   5. CHALLENGES ("MISSION SELECT" POP CARDS)
+   ========================================================================== */
+
+.category-section {
+  margin-bottom: 40px;
+}
+
+.category-header-banner {
+  background: var(--card-bg);
+  border: var(--pop-border);
+  border-radius: var(--pop-radius-md);
+  box-shadow: var(--pop-shadow-md);
+  padding: 12px 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.category-header-banner::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background: var(--pop-blue);
+  border-top-left-radius: var(--pop-radius-md);
+  border-bottom-left-radius: var(--pop-radius-md);
+}
+
+.category-pixel-icon {
+  font-size: 1.1rem;
+  color: var(--pop-blue);
+}
+
+.category-name {
+  font-family: var(--font-heading) !important;
+  font-size: 1.3rem !important;
+  font-weight: 800 !important;
+  color: var(--ink-dark) !important;
+  margin-left: 6px;
+}
+
+.category-count-badge {
+  font-family: var(--font-label);
+  font-size: 0.8rem;
+  font-weight: 700;
+  background-color: var(--pop-blue);
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: var(--pop-radius-pill);
+}
+
+/* Challenge Cards */
+.challenge-card-btn {
+  background-color: var(--card-bg);
+  border: var(--pop-border);
+  border-radius: var(--pop-radius-md);
+  box-shadow: var(--pop-shadow-md);
+  padding: 16px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 155px;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background-color 0.2s ease !important;
+  text-decoration: none !important;
+  overflow: hidden;
+}
+
+.challenge-card-btn:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: var(--pop-shadow-lg);
+  background-color: var(--card-hover-bg);
+  border-color: var(--pop-blue);
+}
+
+.challenge-card-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #000000;
+}
+
+.challenge-card-btn.challenge-solved {
+  background-color: rgba(5, 150, 105, 0.08) !important;
+  border-color: var(--pop-teal) !important;
+  box-shadow: var(--pop-shadow-md) !important;
+}
+
+.challenge-card-btn.challenge-solved::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--pop-teal);
+}
+
+.challenge-cat-tag {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background-color: var(--canvas-subtle);
+  color: var(--pop-blue);
+  padding: 3px 8px;
+  border-radius: var(--pop-radius-pill);
+  border: 1px solid var(--pop-blue);
+  text-transform: uppercase;
+}
+
+.challenge-pts {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  background: var(--pop-yellow);
+  padding: 2px 8px;
+  border-radius: var(--pop-radius-pill);
+  border: var(--pop-border-thin);
+}
+
+.challenge-title-text {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ink-dark);
+  line-height: 1.35;
+  margin: 10px 0;
+  word-break: break-word;
+}
+
+.solved-status-badge {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  font-weight: 800;
+  background-color: var(--pop-teal);
+  color: #ffffff;
+  padding: 3px 10px;
+  border-radius: var(--pop-radius-pill);
+  border: var(--pop-border-thin);
+  box-shadow: 1px 1px 0px #000000;
+}
+
+.unsolved-status-badge {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  font-weight: 800;
+  background-color: var(--pop-blue);
+  color: var(--ink-white);
+  padding: 3px 10px;
+  border-radius: var(--pop-radius-pill);
+  border: var(--pop-border-thin);
+  box-shadow: 1px 1px 0px #000000;
+}
+
+.challenge-solves-count {
+  font-family: var(--font-label);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+/* ==========================================================================
+   6. SCOREBOARD (PODIUM & VIBRANT HIGH SCORES)
+   ========================================================================== */
+
+.arcade-table-wrapper {
+  border: var(--pop-border);
+  border-radius: var(--pop-radius-lg);
+  box-shadow: var(--pop-shadow-xl);
+  background-color: var(--card-bg);
+  overflow: hidden;
+}
+
+.scoreboard-table {
+  width: 100%;
+  margin-bottom: 0 !important;
+  border-collapse: collapse;
+}
+
+.scoreboard-table thead th {
+  background-color: var(--canvas-subtle) !important;
+  color: var(--ink-dark) !important;
+  font-family: var(--font-heading) !important;
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
+  padding: 16px 20px !important;
+  border: none !important;
+  border-bottom: var(--pop-border) !important;
+  letter-spacing: 0.5px;
+}
+
+.scoreboard-table tbody tr {
+  border-bottom: 1.5px solid var(--canvas-subtle);
+  transition: background-color 0.15s ease;
+}
+
+.scoreboard-table tbody tr:hover {
+  background-color: var(--card-hover-bg) !important;
+}
+
+.rank-cell,
+.name-cell,
+.score-cell {
+  padding: 16px 20px !important;
+  vertical-align: middle !important;
+}
+
+.player-name-link {
+  font-family: var(--font-heading) !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  color: var(--ink-dark) !important;
+  text-decoration: none !important;
+}
+
+.player-name-link:hover {
+  color: var(--pop-blue) !important;
+}
+
+.score-points {
+  font-family: var(--font-heading) !important;
+  font-size: 1.15rem !important;
+  font-weight: 900 !important;
+  color: var(--pop-blue) !important;
+}
+
+.score-unit {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ink-muted);
+  margin-left: 4px;
+}
+
+/* Podium Rank Highlights */
+.podium-badge {
+  font-family: var(--font-label);
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: var(--pop-radius-pill);
+  border: var(--pop-border-thin);
+  box-shadow: var(--pop-shadow-sm);
+  display: inline-block;
+}
+
+.podium-1 {
+  background-color: var(--pop-yellow);
+  color: #0f172a;
+}
+
+.podium-2 {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
+
+.podium-3 {
+  background-color: #fed7aa;
+  color: #0f172a;
+}
+
+.rank-number {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink-muted);
+}
+
+.rank-row-1 {
+  background-color: rgba(251, 191, 36, 0.08) !important;
+}
+
+.rank-row-2 {
+  background-color: rgba(226, 232, 240, 0.08) !important;
+}
+
+.rank-row-3 {
+  background-color: rgba(254, 215, 170, 0.08) !important;
+}
+
+/* ==========================================================================
+   7. FORM INPUTS & MODAL (CHALLENGE DIALOG)
+   ========================================================================== */
+
+.form-control,
+.form-select,
+.custom-select,
+select.form-control,
+select.custom-select,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="url"],
+input[type="tel"],
+input[type="search"],
+input[type="file"],
+select,
+textarea {
+  height: auto !important;
+  min-height: 46px !important;
+  line-height: 1.5 !important;
+  font-size: 0.95rem !important;
+  font-family: var(--font-body) !important;
+  font-weight: 500 !important;
+  color: var(--ink-dark) !important;
+  background-color: var(--input-bg) !important;
+  border: var(--pop-border) !important;
+  border-radius: var(--pop-radius-md) !important;
+  box-shadow: var(--pop-shadow-sm) !important;
+  padding: 8px 14px !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  vertical-align: middle !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+select,
+select.form-control,
+.form-select,
+.custom-select {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  padding-right: 32px !important;
+  background-position: right 12px center !important;
+  cursor: pointer;
+}
+
+textarea.form-control,
+textarea {
+  min-height: 110px !important;
+  line-height: 1.6 !important;
+  padding: 12px 14px !important;
+}
+
+.form-control:focus,
+.form-select:focus,
+.custom-select:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--pop-blue) !important;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2), var(--pop-shadow-md) !important;
+  outline: none !important;
+}
+
+.modal-content {
+  background-color: var(--modal-bg) !important;
+  border: var(--pop-border) !important;
+  border-radius: var(--pop-radius-lg) !important;
+  box-shadow: var(--pop-shadow-xl) !important;
+  overflow: hidden;
+}
+
+.modal-header {
+  background-color: var(--canvas-subtle) !important;
+  border-bottom: var(--pop-border) !important;
+  padding: 16px 24px !important;
+}
+
+.modal-body {
+  padding: 28px !important;
+}
+
+.challenge-name {
+  font-size: 1.85rem !important;
+  font-weight: 900 !important;
+  color: var(--ink-dark) !important;
+}
+
+.challenge-value {
+  font-family: var(--font-heading) !important;
+  font-size: 1.2rem !important;
+  font-weight: 800 !important;
+  color: var(--pop-blue) !important;
+}
+
+.challenge-desc {
+  font-size: 1.05rem !important;
+  line-height: 1.6 !important;
+  color: var(--ink-dark) !important;
+  display: block;
+  margin: 20px 0;
+  padding: 20px;
+  background-color: var(--canvas-subtle);
+  border: var(--pop-border-thin);
+  border-radius: var(--pop-radius-md);
+}
+
+/* ==========================================================================
+   8. FOOTER (UNCLIPPED & SPACIOUS)
+   ========================================================================== */
+
+body {
+  margin-bottom: 0 !important;
+}
+
+.footer {
+  position: relative !important;
+  height: auto !important;
+  min-height: 90px !important;
+  line-height: 1.5 !important;
+  background-color: var(--card-bg) !important;
+  border-top: var(--pop-border) !important;
+  padding: 30px 0 36px !important;
+  font-family: var(--font-heading) !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  text-align: center;
+  color: var(--ink-dark) !important;
+  margin-top: auto !important;
+  overflow: visible !important;
+  display: block !important;
+}
+
+.footer .container {
+  height: auto !important;
+  line-height: 1.5 !important;
+}

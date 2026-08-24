@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="jumbotron scoreboard-header">
+    <div class="container text-center">
+      <div class="d-inline-flex align-items-center gap-2 mb-2">
+        <span class="badge" style="background: var(--pop-yellow); color: var(--ink-dark); font-size: 0.85rem; font-weight: 800; padding: 6px 14px; border-radius: 9999px; border: var(--pop-border-thin);">★ LEADERBOARD</span>
+      </div>
+      <h1 class="scoreboard-title mb-2">
+        {% trans %}SCOREBOARD{% endtrans %}
+      </h1>
+      <p class="lead mb-0 text-muted" style="font-size: 1.1rem;">Peringkat Peserta & Perolehan Poin Real-time</p>
+    </div>
+  </div>
+
+  <div class="container scoreboard-container">
+    {% include "components/errors.html" %}
+
+    <div x-data="{ ...ScoreboardDetail(), graphOpen: true }" x-show="show && Object.keys(data).length > 0" class="mb-5">
+      <div class="card p-4 shadow-sm" style="border: var(--pop-border); border-radius: 16px;">
+        <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+          <div class="d-flex align-items-center gap-2">
+            <i class="fas fa-chart-line" style="color: var(--pop-blue); font-size: 1.2rem;"></i>
+            <h4 class="mb-0 fw-bold" style="font-family: var(--font-heading);">SCORE PROGRESSION</h4>
+            <span class="badge bg-light text-dark border ms-2" style="font-size: 0.75rem;">TOP 10 TIMELINE</span>
+          </div>
+          <button class="btn btn-sm btn-outline-primary" @click="graphOpen = !graphOpen" style="border-radius: 8px; font-size: 0.8rem; font-weight: 700;">
+            <i :class="graphOpen ? 'fas fa-eye-slash me-1' : 'fas fa-chart-line me-1'"></i>
+            <span x-text="graphOpen ? 'Sembunyikan Grafik' : 'Tampilkan Grafik'"></span>
+          </button>
+        </div>
+        <div id="score-graph" class="w-100" style="min-height: 380px;" x-show="graphOpen" x-ref="scoregraph" @bracket-change.window="activeBracket=$event.detail; update();">
+          <div class="d-flex align-items-center justify-content-center h-100 py-5">
+            <div class="text-center">
+              <i class="fas fa-circle-notch fa-spin fa-2x fa-fw text-primary mb-2"></i>
+              <p class="text-muted small mb-0">Memuat grafik skor...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="scoreboard" class="row" x-data="ScoreboardList">
+      <template x-if="brackets.length && standings.length">
+        <div class="col-md-12 mb-4">
+          <div class="d-flex align-items-center gap-2 flex-wrap p-3 bg-white border rounded-3" style="border: var(--pop-border) !important;">
+            <span class="fw-bold me-2" style="font-size: 0.9rem;">DIVISI:</span>
+            <button :class="{'btn btn-sm': true, 'btn-primary': !activeBracket, 'btn-outline-primary': activeBracket}" @click="activeBracket=null">{% trans %}SEMUA{% endtrans %}</button>
+            <template x-for="bracket in brackets">
+              <button :class="{'btn btn-sm': true, 'btn-primary': activeBracket == bracket.id, 'btn-outline-primary': activeBracket != bracket.id}" x-text="bracket.name" @click="activeBracket=bracket.id"></button>
+            </template>
+          </div>
+        </div>
+      </template>
+
+      <div class="col-md-12" x-show="standings.length">
+        <div class="arcade-table-wrapper">
+          <table class="table scoreboard-table align-middle">
+            <thead>
+              <tr>
+                <th class="text-center rank-col" style="width: 130px;">PERINGKAT</th>
+                <th class="text-start name-col">{{ get_mode_as_word(capitalize=True) | upper }}</th>
+                <th class="text-end score-col" style="width: 180px;">TOTAL SKOR</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <template x-for="(standing, index) in standings.filter(i => activeBracket ? i.bracket_id==activeBracket : true)">
+                <tr :class="{
+                  'rank-row-1': index === 0,
+                  'rank-row-2': index === 1,
+                  'rank-row-3': index === 2,
+                  'rank-row-regular': index > 2
+                }">
+                  <td class="text-center rank-cell">
+                    <template x-if="index === 0">
+                      <span class="podium-badge podium-1">👑 1ST</span>
+                    </template>
+                    <template x-if="index === 1">
+                      <span class="podium-badge podium-2">🥈 2ND</span>
+                    </template>
+                    <template x-if="index === 2">
+                      <span class="podium-badge podium-3">🥉 3RD</span>
+                    </template>
+                    <template x-if="index > 2">
+                      <span class="rank-number" x-text="'#' + (index + 1)"></span>
+                    </template>
+                  </td>
+                  <td class="text-start name-cell">
+                    <a :href="standing.account_url" class="player-name-link" x-text="standing.name"></a>
+                    <template x-if="standing.bracket_name">
+                      <span class="badge bg-secondary ms-2" x-text="standing.bracket_name"></span>
+                    </template>
+                  </td>
+                  <td class="text-end score-cell">
+                    <span class="score-points" x-text="standing.score"></span>
+                    <span class="score-unit">PTS</span>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-md-12 py-5" x-show="! standings.length">
+        <div class="card p-5 text-center bg-white shadow-sm" style="border: var(--pop-border); border-radius: 16px;">
+          <h4 class="fw-bold mb-2" style="color: #0f172a; font-size: 1.4rem;">BELUM ADA SKOR TERCATAT</h4>
+          <p class="mb-0" style="color: #334155; font-size: 1.15rem; font-weight: 600;">Jadilah yang pertama menyelesaikan tantangan dan puncaki leaderboard!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    window.scoreboardChartOptions = {
+      animation: true,
+      animationDuration: 400,
+      animationEasing: 'quadraticOut'
+    };
+  </script>
+  {{ Assets.js("assets/js/scoreboard.js") }}
+{% endblock %}

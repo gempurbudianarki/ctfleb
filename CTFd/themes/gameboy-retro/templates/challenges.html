@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="jumbotron challenges-header">
+    <div class="container text-center">
+      <div class="d-inline-flex align-items-center gap-2 mb-2">
+        <span class="badge" style="background: var(--pop-blue); color: #fff; font-size: 0.85rem; font-weight: 800; padding: 6px 14px; border-radius: 9999px; border: var(--pop-border-thin);">⚡ MISSION CONTROL</span>
+      </div>
+      <h1 class="challenges-title mb-2">
+        {% trans %}CHALLENGES{% endtrans %}
+      </h1>
+      <p class="lead mb-0 text-muted" style="font-size: 1.1rem;">Pilih Kategori, Selesaikan Tantangan & Submit Flag</p>
+    </div>
+  </div>
+
+  <div class="container challenges-container">
+    <div class="row">
+      <div class="col-md-12">
+        {% include "components/errors.html" %}
+      </div>
+    </div>
+
+    <div 
+      x-data="ChallengeBoard" 
+      @load-challenges.window="loadChallenges()" 
+      @load-challenge.window="loadChallenge($event.detail)"
+    >
+      <div
+          x-ref="challengeWindow" id="challenge-window" class="modal fade" tabindex="-1" role="dialog" x-data=""
+          x-html="$store.challenge.data.view"
+      ></div>
+
+      <div x-show="!loaded" class="py-5">
+        <div class="d-flex align-items-center justify-content-center">
+          <div class="text-center p-4 bg-white border rounded-3" style="border: var(--pop-border) !important; max-width: 320px;">
+            <i class="fas fa-circle-notch fa-spin fa-2x fa-fw text-primary mb-2"></i>
+            <p class="text-muted small mb-0 fw-bold">Memuat daftar tantangan...</p>
+          </div>
+        </div>
+      </div>
+
+      <div x-show="loaded" style="display: none;">
+        <template x-if="challenges && challenges.length > 0">
+          <div>
+            <template x-for="(category, idx) in getCategories()" :key="idx">
+              <div class="category-section mb-5">
+                <div class="category-header-banner mb-3 d-flex align-items-center justify-content-between">
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="category-pixel-icon">⚡</span>
+                    <h3 class="category-name mb-0" x-text="category.toUpperCase()"></h3>
+                  </div>
+                  <span class="category-count-badge" x-text="getChallenges(category).length + ' SOAL'"></span>
+                </div>
+
+                <div class="category-challenges">
+                  <div class="row g-3">
+                    <template x-for="(c, idx) in getChallenges(category)" :key="c.id">
+                      <div class="col-sm-6 col-md-4 col-lg-3">
+                        <button
+                            class="challenge-card-btn w-100"
+                            :class="{
+                              'challenge-solved': c.solved_by_me,
+                              'challenge-unsolved': !c.solved_by_me
+                            }"
+                            :value="c.id" @click="loadChallenge(c.id)"
+                        >
+                          <div class="challenge-card-top d-flex justify-content-between align-items-center">
+                            <span class="challenge-cat-tag" x-text="c.category ? c.category.toUpperCase().substring(0, 8) : 'QUEST'"></span>
+                            <span class="challenge-pts" x-text="c.value + ' PTS'"></span>
+                          </div>
+
+                          <div class="challenge-card-mid py-3">
+                            <div class="challenge-title-text" x-text="c.name"></div>
+                          </div>
+
+                          <div class="challenge-card-bottom d-flex justify-content-between align-items-center">
+                            <template x-if="c.solved_by_me">
+                              <span class="solved-status-badge">✓ SOLVED</span>
+                            </template>
+                            <template x-if="!c.solved_by_me">
+                              <span class="unsolved-status-badge">▶ PLAY</span>
+                            </template>
+                            <span class="challenge-solves-count" x-text="c.solves ? c.solves + ' Solves' : '0 Solves'"></span>
+                          </div>
+                        </button>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </template>
+
+        <template x-if="!challenges || challenges.length === 0">
+          <div class="col-md-12 py-5 text-center">
+            <div class="card p-5 bg-white mx-auto" style="max-width: 600px; border: var(--pop-border); border-radius: 16px;">
+              <div class="mb-3">
+                <i class="fas fa-flag-checkered text-primary" style="font-size: 3rem;"></i>
+              </div>
+              <h4 class="fw-bold mb-2" style="color: var(--ink-dark);">TANTANGAN BELUM DIBUKA</h4>
+              <p class="text-muted mb-4" style="font-size: 1.05rem;">Tantangan belum dirilis atau memerlukan login untuk melihat daftar soal.</p>
+              {% if not authed() %}
+                <div>
+                  <a href="{{ url_for('auth.login') }}" class="btn btn-primary px-4 py-2">
+                    <i class="fas fa-sign-in-alt"></i> Login Sekarang
+                  </a>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ Assets.js("assets/js/challenges.js") }}
+  <script>
+    (function() {
+      // Auto-fallback in case Alpine or SSE network stalls
+      const checkAndRecover = async () => {
+        try {
+          const boardEl = document.querySelector('[x-data="ChallengeBoard"]');
+          if (boardEl && window.Alpine) {
+            const data = Alpine.$data(boardEl);
+            if (data && (!data.loaded || !data.challenges || data.challenges.length === 0)) {
+              const res = await fetch('/api/v1/challenges', { headers: { 'Accept': 'application/json' } });
+              if (res.ok) {
+                const json = await res.json();
+                if (json && json.data) {
+                  data.challenges = json.data;
+                }
+              }
+              data.loaded = true;
+            }
+          }
+        } catch(e) {
+          console.warn("Challenges fallback sync:", e);
+        }
+      };
+
+      setTimeout(checkAndRecover, 400);
+      setTimeout(checkAndRecover, 1500);
+    })();
+  </script>
+{% endblock %}

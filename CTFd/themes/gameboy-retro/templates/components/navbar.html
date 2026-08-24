@@ -1,0 +1,278 @@
+<nav class="navbar navbar-expand-xl navbar-dark bg-dark fixed-top py-2">
+  <div class="container-fluid px-3 px-xl-4 d-flex align-items-center justify-content-between">
+    
+    <!-- 1. LEFT: Brand & Community Identity -->
+    <a href="{{ url_for('views.static_html', route='/') }}" class="navbar-brand d-inline-flex align-items-center gap-2 me-2">
+      <img
+          class="img-responsive ctf_logo"
+          src="{{ url_for('views.themes', theme='gameboy-retro', path='img/logo_cca.png') }}"
+          alt="CCA Logo"
+          height="34"
+          style="border-radius: 6px; object-fit: contain;"
+      >
+      <div class="d-flex flex-column text-start">
+        <span class="brand-main-text">CCA ARENA</span>
+        <span class="brand-sub-text">CYBERSECURITY COMMUNITY OF ACEH</span>
+      </div>
+    </a>
+
+    <!-- Mobile Menu Toggle Button -->
+    <button
+        class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#base-navbars"
+        aria-controls="base-navbars" aria-expanded="false" aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Content -->
+    <div class="collapse navbar-collapse justify-content-between" id="base-navbars">
+      
+      <!-- 2. CENTER: Main Navigation Pills -->
+      <div class="navbar-nav mx-auto my-2 my-xl-0 d-flex align-items-center nav-pills-container">
+        <a class="nav-link nav-pill-item {{ 'active' if request.path.startswith('/challenges') }}" href="{{ url_for('challenges.listing') }}">
+          <i class="fas fa-flag text-primary"></i>
+          <span>{% trans %}Challenges{% endtrans %}</span>
+        </a>
+
+        {% if Configs.account_visibility != 'admins' and Configs.score_visibility != 'admins' %}
+          <a class="nav-link nav-pill-item {{ 'active' if request.path.startswith('/scoreboard') }}" href="{{ url_for('scoreboard.listing') }}">
+            <i class="fas fa-trophy text-warning"></i>
+            <span>{% trans %}Scoreboard{% endtrans %}</span>
+          </a>
+        {% endif %}
+
+        {% if Configs.account_visibility != 'admins' %}
+          <a class="nav-link nav-pill-item {{ 'active' if request.path.startswith('/users') }}" href="{{ url_for('users.listing') }}">
+            <i class="fas fa-user-friends text-info"></i>
+            <span>{% trans %}Users{% endtrans %}</span>
+          </a>
+
+          {% if Configs.user_mode == 'teams' %}
+            <a class="nav-link nav-pill-item {{ 'active' if request.path.startswith('/teams') }}" href="{{ url_for('teams.listing') }}">
+              <i class="fas fa-users text-success"></i>
+              <span>{% trans %}Teams{% endtrans %}</span>
+            </a>
+          {% endif %}
+        {% endif %}
+
+        {% for page in Plugins.user_menu_pages %}
+          <a class="nav-link nav-pill-item" href="{{ page.route }}" {% if page.link_target %}target="{{ page.link_target }}"{% endif %}>
+            <span>{{ page.title }}</span>
+          </a>
+        {% endfor %}
+      </div>
+
+      <!-- 3. RIGHT: User Profile & Utility Hub -->
+      <div class="navbar-nav d-flex align-items-center gap-2 my-2 my-xl-0">
+        
+        {% if authed() %}
+          {% if is_admin() %}
+            <a class="admin-badge-btn" href="{{ url_for('admin.view') }}" title="Admin Console">
+              <i class="fas fa-shield-alt"></i>
+              <span>{% trans %}Admin Panel{% endtrans %}</span>
+            </a>
+          {% endif %}
+
+          <a class="nav-link icon-round-btn" href="{{ url_for('views.notifications') }}" title="{% trans %}Notifications{% endtrans %}">
+            <i class="fas fa-bell"></i>
+            <span x-data x-show="$store.unread_count > 0" x-text="$store.unread_count" class="badge rounded-pill bg-danger badge-notification"></span>
+          </a>
+
+          <!-- User Dropdown Menu -->
+          <div class="nav-item dropdown">
+            <button class="user-profile-capsule dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-user-circle text-primary"></i>
+              <span class="user-name-text">{{ User.name }}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
+              <li>
+                <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url_for('users.private') }}">
+                  <i class="fas fa-user text-muted"></i>
+                  <span>{% trans %}Profile{% endtrans %}</span>
+                </a>
+              </li>
+              {% if Configs.user_mode == "teams" %}
+                <li>
+                  <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url_for('teams.private') }}">
+                    <i class="fas fa-users text-muted"></i>
+                    <span>{% trans %}Team{% endtrans %}</span>
+                  </a>
+                </li>
+              {% endif %}
+              <li>
+                <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url_for('views.settings') }}">
+                  <i class="fas fa-cogs text-muted"></i>
+                  <span>{% trans %}Settings{% endtrans %}</span>
+                </a>
+              </li>
+              {% if is_admin() %}
+                <li><hr class="dropdown-divider my-1"></li>
+                <li>
+                  <a class="dropdown-item d-flex align-items-center gap-2 py-2 text-primary fw-bold" href="{{ url_for('admin.view') }}">
+                    <i class="fas fa-wrench"></i>
+                    <span>{% trans %}Admin Panel{% endtrans %}</span>
+                  </a>
+                </li>
+              {% endif %}
+              <li><hr class="dropdown-divider my-1"></li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger fw-bold" href="{{ url_for('auth.logout') }}">
+                  <i class="fas fa-sign-out-alt"></i>
+                  <span>{% trans %}Logout{% endtrans %}</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+        {% else %}
+          {% if registration_visible() %}
+            <a class="nav-link nav-pill-item" href="{{ url_for('auth.register') }}">
+              <i class="fas fa-user-plus text-primary"></i>
+              <span>{% trans %}Register{% endtrans %}</span>
+            </a>
+          {% endif %}
+
+          <a class="btn btn-sm btn-primary px-3 py-2 fw-bold" href="{{ url_for('auth.login') }}" style="border-radius: 8px;">
+            <i class="fas fa-sign-in-alt me-1"></i>
+            <span>{% trans %}Login{% endtrans %}</span>
+          </a>
+        {% endif %}
+
+        <!-- Utilities Cluster (Language, Theme, SFX, BGM) -->
+        <div class="utility-cluster d-inline-flex align-items-center gap-1">
+          
+          <!-- Language Selector -->
+          <div class="dropdown">
+            <button class="nav-link icon-round-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ganti Bahasa">
+              <i class="fas fa-language"></i>
+            </button>
+            <form x-data="LanguageForm">
+              <ul class="dropdown-menu dropdown-menu-end shadow">
+                {% set curr_lang = get_locale() %}
+                {%- for lang in Languages.names.items() %}
+                <li>
+                    <span class="dropdown-item {{ 'bg-primary text-white' if (curr_lang == lang[0]) }}" @click="set" value="{{ lang[0] }}">
+                      {{ lang[1] }}
+                    </span>
+                </li>
+                {%- endfor %}
+              </ul>
+            </form>
+          </div>
+
+          <!-- Theme Dark / Light Switcher -->
+          <button class="nav-link icon-round-btn theme-switch" type="button" title="Ganti Mode Gelap / Terang">
+            <i class="fas fa-sun"></i>
+          </button>
+
+          <!-- 8-Bit SFX Sound FX Button -->
+          <button id="cca-sfx-btn" class="sound-toggle-btn" type="button" onclick="window.ccaToggleSFX();" title="Efek Suara Arcade 8-Bit">
+            <i class="fas fa-volume-up"></i> <span>SFX: ON</span>
+          </button>
+
+          <!-- 8-Bit Super Mario BGM Music Button -->
+          <button id="cca-bgm-btn" class="bgm-toggle-btn" type="button" onclick="window.ccaToggleBGM();" title="Musik Latar Super Mario Bros 8-Bit">
+            <i class="fas fa-music"></i> <span>BGM: OFF</span>
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Native Background Music Audio Element -->
+<audio id="cca-mario-bgm" loop preload="auto" src="{{ url_for('views.themes', theme='gameboy-retro', path='sound/mario_theme.wav') }}"></audio>
+
+<!-- Bulletproof Audio Controller -->
+<script>
+(function () {
+  const BLIP_WAV = "data:audio/wav;base64,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ayih16zXuNfE19DX29fn1/LX/tcK2Osn3yfUJ8gnvCexJ6UnmieOJ4MnidiU2J/Yq9i22MLYzdjY2OTYEScGJ/om7ybkJtgmzSbCJrcmqyZg2WvZdtmB2Y3ZmNmj2a7Zudk8JjEmJiYbJg8mBCb5Je4l4yXYJTPaPtpJ2lPaXtpp2nTaf9qK2mslYCVVJUslQCU1JSolHyUVJQolAdsM2xbbIdss2zbbQdtM21bbnySUJIokfyR1JGokXyRVJEokwNvL29Xb4Nvq2/Xb/9sK3BTcHtzXI80jwiO4I64joyOZI48jhCOG3JDcm9yl3K/cudzE3M7c2NweIxQjCSP/IvUi6yLhItcizSI93UjdUt1c3WbdcN163YTdjt1oIl4iVCJKIkAiNiIsIiMiGSLx3fvdBd4P3hneIt4s3jbeQN62IawhoyGZIY8hhSF8IXIhaCGh3qvetd6+3sje0t7b3uXe7t4IIf4g9SDrIOIg2CDPIMUgvCBO31ffYd9q33Tffd+H35Dfmt9dIFQgSiBBIDggLiAlIBwgEiD33wDgCuAT4BzgJeAv4Djgvx+2H60fox+aH5EfiB9/H3YflOCd4Kbgr+C44MHgyuDT4NzgGx8SHwkfAB/3Hu4e5R7cHi3hNuE/4UjhUeFa4WPhbOF04YMeeh5xHmgeXx5XHk4eRR48Hs3h1eHe4efh8OH44QHiCuLuHeUd3B3UHcsdwh26HbEdqB1g4mniceJ64oPii+KU4pziWx1THUodQh05HTEdKB0gHRcd8eL54gLjCuMT4xvjI+Ms48wcxBy7HLMcqhyiHJockhyJHH/jh+OQ45jjoOOo47DjueM/HDccLxwnHB4cFhwOHAYcAuQK5BLkG+Qj5CvkM+Q75L0btRutG6UbnRuVG40bhRt9G4vkk+Sb5KPkq+Sz5Lvkw+Q2Gy4bJhseGxYbDhsGG/4aCeUR5RnlIeUp5TDlOOVA5bgasRqpGqEamRqSGooaghp7Go3lleWc5aTlrOWz5bvlw+U2Gi4aJxofGhcaEBoIGgEaB+YO5hbmHeYl5izmNOY75r0ZthmuGacZnxmYGZAZiRl+5obmjeaV5pzmo+ar5rLmRxk/GTgZMRkpGSIZGxkTGfTm++YC5wrnEecY5x/nJufSGMsYxBi9GLYYrhinGKAYZ+du53XnfOeE54vnkueZ52AYWRhSGEsYRBg9GDYY0efY59/n5uft5/Tn++cC6PcX8BfpF+IX2xfUF80XxhdB6EfoTuhV6FzoY+hq6HHoiReCF3sXdBdtF2YXYBdZF67otei76MLoyejQ6NboIxccFxYXDxcIFwEX+xb0FhPpGekg6SbpLek06TrpQem4FrIWqxalFp4WmBaRFnbpfOmD6YnpkOmW6Z3po+lWFlAWSRZDFjwWNhYwFikW3enk6erp8en36f3pBOr2FfAV6RXjFdwV1hXQFckVPepD6knqUOpW6lzqY+qXFZEVixWEFX4VeBVyFWsVm+qh6qfqreq06rrqwOo6FTQVLhUnFSEVGxUVFQ8V9+r96gPrCesQ6xbrHOveFNgU0hTMFMYUwBS6FLQUUutY617rZOtq63DrduuEFH4UeBRyFGwUZhRhFKXrq+ux67frvevD68nrz+ssFCYUIBQaFBQUDhQJFP3rA+wJ7A/sFOwa7CDs2hPVE88TyRPDE74TuBOyE1TsWexf7GXsauxw7HbshRN/E3kTdBNuE2gTYxOj7Knsruy07Lnsv+zF7DYTMBMrEyUTIBMaExUTDxP37PzsAu0H7Q3tEu0Y7eMS3RLYEtMSzRLIEsISQ+1J7U7tVO1Z7V7tZO2XEpESjBKHEoESfBJ3Eo/tlO2a7Z/tpO2q7a/tTBJHEkESPBI3EjESLBLZ7d7t5O3p7e7t8+357QIS/RH4EfIR7RHoEeMR3hEo7i3uMu437jzuQe5H7rQRrxGqEaURoBGbEZYRcO517nruf+6E7onuju5tEWgRYxFeEVkRVBFPEbbuu+7A7sXuyu7P7iwRJxEiER0RGBETEQ4R9+787gHvBu8L7xDvFe/mEOIQ3RDYENMQzhDJEDzvQe9G70rvT+9U71nvohCdEJkQlBCPEIoQhRB/74Tvie+O75Lvl++c718QWhBWEFEQTBBIEEMQwu/H78vv0O/V79nvIhAdEBkQFBAPEAsQBhD/7wPwCPAN8BHwFvAb8OEP3A/YD9MPzg/KD8UPP/BE8EjwTfBS8FbwW/ChD5wPmA+TD48Pig968H/wg/CI8IzwkfCV8GYPYg9dD1kPVA9QD0wPufC98MLwxvDL8M/wLQ8oDyQPHw8bDxcPEg/y8Pbw+/D/8ATxCPEM8e8O6w7nDuIO3g7aDivxL/Ez8TfxPPFA8UTxtw6zDq8Oqw6mDqIOng5m8Wvxb/Fz8Xfxe/GADnwOeA50DnAOaw5nDp3xofGl8arxrvGy8UoORg5CDj4OOQ41DjEO0/HX8dvx3/Hj8efxFA4QDgwOCA4EDgAO/A0I8gzyEPIU8hjyHPLgDdwN2A3UDdANzA3IDTzyQPJE8kjyTPJQ8qwNqA2kDaANnA2YDZQNcPJ08njyfPKA8oTyeQ11DXENbQ1pDWUNn/Kj8qfyqvKu8rLytvJGDUINPg07DTcNMw3R8tXy2fLc8uDy5PLo8hQNEQ0NDQkNBQ0BDQLzBvMK8w7zEfMV8+cM4wzgDNwM2AzUDNEMM/M38zrzPvNC80bztwyzDK8MrAyoDKQMX/Nj82fzavNu83LzdfOHDIQMgAx8DHkMdQyP85LzlvOZ853zofNcDFgMVQxRDE0MSgy6873zwfPE88jzy/PP8y4MKgwmDCMMHwwcDOjz6/Pv8/Lz9vP58wMMAAz8C/kL9QvyCxH0FfQY9Bz0H/Qj9NoL1gvTC9ALzAvJC8ULPvRC9EX0SPRM9E/0rQuqC6cLowugC50LZ/Rq9G70cfR09A==";
+  
+  function playBlip() {
+    try {
+      const s = new Audio(BLIP_WAV);
+      s.volume = 0.6;
+      s.play().catch(function(){});
+    } catch(e){}
+  }
+
+  let sfxOn = localStorage.getItem('cca_sfx') !== 'false';
+  let bgmOn = localStorage.getItem('cca_bgm') === 'true';
+
+  function updateVisuals() {
+    const sBtn = document.getElementById('cca-sfx-btn');
+    if (sBtn) {
+      sBtn.innerHTML = '<i class="fas fa-volume-up"></i> <span>' + (sfxOn ? 'SFX: ON' : 'SFX: OFF') + '</span>';
+      sBtn.style.setProperty('background', sfxOn ? 'var(--pop-teal)' : '#64748b', 'important');
+    }
+    const bBtn = document.getElementById('cca-bgm-btn');
+    if (bBtn) {
+      bBtn.innerHTML = '<i class="fas fa-music"></i> <span>' + (bgmOn ? 'BGM: ON' : 'BGM: OFF') + '</span>';
+      bBtn.style.setProperty('background', bgmOn ? 'var(--pop-pink)' : '#64748b', 'important');
+    }
+  }
+
+  window.ccaToggleSFX = function () {
+    sfxOn = !sfxOn;
+    localStorage.setItem('cca_sfx', sfxOn ? 'true' : 'false');
+    updateVisuals();
+    if (sfxOn) playBlip();
+  };
+
+  window.ccaToggleBGM = function () {
+    bgmOn = !bgmOn;
+    localStorage.setItem('cca_bgm', bgmOn ? 'true' : 'false');
+    updateVisuals();
+
+    const audio = document.getElementById('cca-mario-bgm');
+    if (audio) {
+      if (bgmOn) {
+        audio.volume = 0.25;
+        audio.play().catch(function() {});
+      } else {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    }
+  };
+
+  function initAudioState() {
+    updateVisuals();
+    const audio = document.getElementById('cca-mario-bgm');
+    if (bgmOn && audio) {
+      audio.volume = 0.25;
+      const promise = audio.play();
+      if (promise !== undefined) {
+        promise.catch(function() {
+          function resumeOnGesture() {
+            if (bgmOn && audio && audio.paused) {
+              audio.play().catch(function(){});
+            }
+            window.removeEventListener('click', resumeOnGesture);
+            window.removeEventListener('keydown', resumeOnGesture);
+          }
+          window.addEventListener('click', resumeOnGesture);
+          window.addEventListener('keydown', resumeOnGesture);
+        });
+      }
+    }
+  }
+
+  // Click sounds for UI elements
+  document.addEventListener('click', function (e) {
+    if (!sfxOn) return;
+    const target = e.target.closest('button, .btn, .nav-link, .challenge-card-btn, .navbar-brand');
+    if (target && !target.id.includes('cca-sfx-btn') && !target.id.includes('cca-bgm-btn')) {
+      playBlip();
+    }
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAudioState);
+  } else {
+    initAudioState();
+  }
+})();
+</script>

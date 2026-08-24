@@ -2,15 +2,19 @@
 <html>
 
 <head>
-	<title>Admin Panel</title>
+	<title>CCA Admin Panel</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" href="{{ url_for('views.themes', theme='admin', path='img/favicon.ico') }}" type="image/x-icon">
 	<link rel="icon" href="{{ url_for('views.themes', theme='admin', path='img/favicon.ico') }}" type="image/x-icon">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 	{{ Assets.css("assets/css/main.scss", theme="admin") }}
 	{{ Assets.css("assets/css/fonts.scss", theme="admin") }}
 	{{ Assets.css("assets/css/admin.scss", theme="admin") }}
 	{{ Assets.css("assets/css/codemirror.scss", theme="admin") }}
+	<link rel="stylesheet" href="{{ url_for('views.themes', theme='gameboy-retro', path='css/admin-theme.css') }}">
 	<script type="text/javascript">
 		var init = {
 			'urlRoot': "{{ request.script_root }}",
@@ -38,18 +42,20 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-		<div class="container">
-			<a href="{{ url_for('views.static_html', route='/') }}" class="navbar-brand">CTFd</a>
+	<nav class="navbar navbar-expand-xl navbar-dark bg-dark fixed-top">
+		<div class="container-fluid px-3 px-xl-4">
+			<a href="{{ url_for('admin.statistics') }}" class="navbar-brand d-inline-flex align-items-center gap-2 me-3">
+				<img src="{{ url_for('views.themes', theme='gameboy-retro', path='img/logo_cca.png') }}" alt="CCA Logo" height="30" style="border-radius: 6px; object-fit: contain;">
+				<span style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">CCA ADMIN</span>
+			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#base-navbars"
 					aria-controls="base-navbars" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="base-navbars">
-				<ul class="navbar-nav mr-auto">
+				<ul class="navbar-nav mr-auto align-items-center flex-wrap flex-xl-nowrap">
 					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.statistics') }}">Statistics</a></li>
-					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.notifications') }}">Notifications</a>
-					</li>
+					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.notifications') }}">Notifications</a></li>
 					<li class="nav-item dropdown">
 						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">Pages</a>
 						<div class="dropdown-menu">
@@ -108,7 +114,12 @@
 						{% endif %}
 					{% endif %}
 				</ul>
-				<ul class="nav navbar-nav navbar-right">
+				<ul class="nav navbar-nav navbar-right align-items-center flex-wrap flex-xl-nowrap gap-2">
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('views.static_html', route='/') }}" title="Back to Main Site">
+							<i class="fas fa-home"></i> <span>Main Site</span>
+						</a>
+					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="https://docs.ctfd.io/" target="_blank">
 							<i class="far fa-question-circle"></i>
@@ -135,16 +146,15 @@
 		{% endblock %}
 	</main>
 
-	<footer class="footer pt-2">
+	<footer class="footer pt-4 pb-4">
 		<div class="container text-center">
-			<a href="https://ctfd.io" class="text-secondary">
-				<small class="text-muted">
-					Powered by CTFd
-				</small>
-			</a>
-			<span>
-				<small class="text-muted"><br> Version {{ get_config('ctf_version') }}</small>
-			</span>
+			<div class="d-flex align-items-center justify-content-center gap-2 mb-1">
+				<img src="{{ url_for('views.themes', theme='gameboy-retro', path='img/logo_cca.png') }}" alt="CCA Logo" height="22" style="object-fit: contain;">
+				<span style="font-weight: 800; font-size: 0.9rem; color: #0f172a;">CYBERSECURITY COMMUNITY OF ACEH (CCA)</span>
+			</div>
+			<small class="text-muted d-block" style="font-size: 0.82rem;">
+				Admin Console • Powered by CTFd v{{ get_config('ctf_version') }}
+			</small>
 		</div>
 	</footer>
 
@@ -153,6 +163,8 @@
 	{% endblock %}
 
 	{% block scripts %} {% endblock %}
+
+	<script src="{{ url_for('views.themes', theme='gameboy-retro', path='js/gameboy-effects.js') }}"></script>
 
 	{% for script in get_registered_admin_scripts() %}
 		{% if script.startswith('http') %}
