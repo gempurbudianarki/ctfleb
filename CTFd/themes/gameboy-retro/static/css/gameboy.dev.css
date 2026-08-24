@@ -1230,8 +1230,17 @@ body {
 }
 
 /* ==========================================================================
-   11. CUSTOM HIGH-TECH CYBER MODAL POPUP DIALOGS
+   11. CUSTOM HIGH-TECH CYBER MODAL POPUP DIALOGS & HINT DETAILS
    ========================================================================== */
+.custom-hint-details summary {
+  list-style: none;
+  cursor: pointer;
+  outline: none;
+}
+.custom-hint-details summary::-webkit-details-marker {
+  display: none;
+}
+
 .cyber-modal-backdrop {
   position: fixed;
   top: 0;
