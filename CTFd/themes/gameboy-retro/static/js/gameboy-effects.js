@@ -619,6 +619,11 @@
           }
         } catch (err) {}
       });
+
+      sse.onerror = function() {
+        // Close cleanly on proxy error without console spam; auto-sync poller handles telemetry
+        try { sse.close(); } catch(e) {}
+      };
     } catch (err) {}
   }
 
