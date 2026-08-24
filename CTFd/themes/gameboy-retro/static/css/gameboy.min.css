@@ -980,7 +980,6 @@ textarea {
   padding: 8px 14px !important;
   box-sizing: border-box !important;
   display: block !important;
-  vertical-align: middle !important;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -1123,4 +1122,111 @@ body {
   color: var(--pop-blue) !important;
   padding-left: 20px !important;
 }
+
+/* ==========================================================================
+   10. HIGH-TECH CYBER PODIUM & MISSION CONTROL STYLING
+   ========================================================================== */
+
+/* Podium Spotlight Cards */
+.podium-spotlight-card {
+  border-radius: var(--pop-radius-lg);
+  border: var(--pop-border);
+  box-shadow: var(--pop-shadow-md);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: var(--card-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.podium-spotlight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--pop-shadow-lg);
+}
+
+.podium-gold {
+  border-color: #f59e0b !important;
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.12) 0%, var(--card-bg) 100%) !important;
+  box-shadow: 0 8px 24px -4px rgba(245, 158, 11, 0.25), var(--pop-shadow-md) !important;
+}
+
+.podium-silver {
+  border-color: #94a3b8 !important;
+  background: linear-gradient(180deg, rgba(148, 163, 184, 0.12) 0%, var(--card-bg) 100%) !important;
+}
+
+.podium-bronze {
+  border-color: #d97706 !important;
+  background: linear-gradient(180deg, rgba(217, 119, 6, 0.1) 0%, var(--card-bg) 100%) !important;
+}
+
+.podium-badge-icon {
+  font-size: 1.8rem;
+  margin-bottom: 6px;
+}
+
+.podium-rank-title {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--ink-secondary);
+  margin-bottom: 6px;
+}
+
+.podium-player-name a {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: var(--ink-dark);
+  text-decoration: none;
+}
+
+.podium-player-name a:hover {
+  color: var(--pop-blue);
+  text-decoration: underline;
+}
+
+.podium-player-score {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: var(--pop-blue);
+  font-size: 1.2rem;
+}
+
+/* Filter Pill Bar */
+.filter-pills-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.filter-pills-bar::-webkit-scrollbar-thumb {
+  background: var(--pop-blue);
+  border-radius: 4px;
+}
+
+.filter-pill-btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: var(--pop-border-thin) !important;
+  box-shadow: var(--pop-shadow-sm);
+}
+
+.filter-pill-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--pop-shadow-md);
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+}
+
 

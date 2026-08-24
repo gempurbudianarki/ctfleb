@@ -5,6 +5,10 @@
     <div class="container text-center">
       <div class="d-inline-flex align-items-center gap-2 mb-2">
         <span class="badge" style="background: var(--pop-yellow); color: var(--ink-dark); font-size: 0.85rem; font-weight: 800; padding: 6px 14px; border-radius: 9999px; border: var(--pop-border-thin);">★ LEADERBOARD</span>
+        <span class="badge d-inline-flex align-items-center gap-2 px-3 py-2" style="background: rgba(16, 185, 129, 0.15); color: #059669; border: 1.5px solid #10b981; border-radius: 9999px; font-weight: 800; font-size: 0.78rem;">
+          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; animation: pulse 1.5s infinite;"></span>
+          LIVE REAL-TIME TELEMETRY
+        </span>
       </div>
       <h1 class="scoreboard-title mb-2">
         {% trans %}SCOREBOARD{% endtrans %}
@@ -45,6 +49,47 @@
             <template x-for="bracket in brackets">
               <button :class="{'btn btn-sm': true, 'btn-primary': activeBracket == bracket.id, 'btn-outline-primary': activeBracket != bracket.id}" x-text="bracket.name" @click="activeBracket=bracket.id"></button>
             </template>
+          </div>
+        </div>
+      </template>
+
+      <!-- Podium Top 3 Spotlight Cards -->
+      <template x-if="standings.length >= 3">
+        <div class="col-md-12 mb-4">
+          <div class="row g-3 justify-content-center">
+            <!-- 2nd Place (Silver) -->
+            <div class="col-md-4 order-md-1">
+              <div class="podium-spotlight-card podium-silver p-3 text-center h-100">
+                <div class="podium-badge-icon">🥈</div>
+                <div class="podium-rank-title">2ND PLACE</div>
+                <h5 class="podium-player-name text-truncate mb-1">
+                  <a :href="standings[1].account_url" x-text="standings[1].name"></a>
+                </h5>
+                <div class="podium-player-score"><span x-text="standings[1].score"></span> <small>PTS</small></div>
+              </div>
+            </div>
+            <!-- 1st Place (Gold Champion) -->
+            <div class="col-md-4 order-md-0 order-lg-1">
+              <div class="podium-spotlight-card podium-gold p-4 text-center h-100">
+                <div class="podium-badge-icon" style="font-size: 2.2rem;">👑</div>
+                <div class="podium-rank-title text-warning">CHAMPION • 1ST</div>
+                <h4 class="podium-player-name text-truncate mb-1 fw-bold">
+                  <a :href="standings[0].account_url" x-text="standings[0].name"></a>
+                </h4>
+                <div class="podium-player-score fw-bold" style="font-size: 1.5rem;"><span x-text="standings[0].score"></span> <small>PTS</small></div>
+              </div>
+            </div>
+            <!-- 3rd Place (Bronze) -->
+            <div class="col-md-4 order-md-2">
+              <div class="podium-spotlight-card podium-bronze p-3 text-center h-100">
+                <div class="podium-badge-icon">🥉</div>
+                <div class="podium-rank-title">3RD PLACE</div>
+                <h5 class="podium-player-name text-truncate mb-1">
+                  <a :href="standings[2].account_url" x-text="standings[2].name"></a>
+                </h5>
+                <div class="podium-player-score"><span x-text="standings[2].score"></span> <small>PTS</small></div>
+              </div>
+            </div>
           </div>
         </div>
       </template>

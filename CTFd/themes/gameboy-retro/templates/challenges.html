@@ -39,14 +39,73 @@
         </div>
       </div>
 
-      <div x-show="loaded" style="display: none;">
+      <div x-show="loaded" style="display: none;" x-data="{ selectedCategory: 'ALL', searchQuery: '' }">
+        <!-- High-Tech Mission Control Quick Stats & Filter Bar -->
+        <div class="row g-3 mb-4 align-items-center">
+          <div class="col-lg-6 col-md-12">
+            <div class="input-group search-cyber-group" style="box-shadow: var(--pop-shadow-sm); border-radius: 12px; overflow: hidden; border: var(--pop-border-thin);">
+              <span class="input-group-text bg-white border-0 text-muted px-3"><i class="fas fa-search"></i></span>
+              <input type="text" class="form-control border-0 py-2" placeholder="Cari judul tantangan atau kategori..." x-model="searchQuery" style="font-size: 0.95rem; font-weight: 500;">
+              <template x-if="searchQuery">
+                <button class="btn btn-light border-0 text-muted" @click="searchQuery = ''"><i class="fas fa-times"></i></button>
+              </template>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-12">
+            <div class="d-flex align-items-center gap-2 justify-content-lg-end flex-wrap">
+              <span class="badge py-2 px-3" style="background: var(--canvas-subtle); color: var(--ink-dark); border: var(--pop-border-thin); font-size: 0.85rem; font-weight: 700; border-radius: 10px;">
+                <i class="fas fa-cubes text-primary me-1"></i> <span x-text="challenges.length + ' TANTANGAN'"></span>
+              </span>
+              <span class="badge py-2 px-3" style="background: var(--canvas-subtle); color: var(--ink-dark); border: var(--pop-border-thin); font-size: 0.85rem; font-weight: 700; border-radius: 10px;">
+                <i class="fas fa-star text-warning me-1"></i> <span x-text="challenges.reduce((sum, c) => sum + (c.value || 0), 0) + ' TOTAL POIN'"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div class="d-flex align-items-center gap-2 overflow-auto pb-3 mb-4 filter-pills-bar" style="scrollbar-width: thin;">
+          <button 
+            type="button" 
+            class="btn btn-sm px-3 py-2 fw-bold filter-pill-btn" 
+            :class="selectedCategory === 'ALL' ? 'btn-primary' : 'btn-outline-secondary'"
+            @click="selectedCategory = 'ALL'"
+            style="border-radius: 9999px; white-space: nowrap; font-size: 0.85rem;"
+          >
+            ⚡ SEMUA KATEGORI (<span x-text="challenges.length"></span>)
+          </button>
+          <template x-for="(cat, idx) in getCategories()" :key="idx">
+            <button 
+              type="button" 
+              class="btn btn-sm px-3 py-2 fw-bold filter-pill-btn" 
+              :class="selectedCategory === cat ? 'btn-primary' : 'btn-outline-secondary'"
+              @click="selectedCategory = cat"
+              style="border-radius: 9999px; white-space: nowrap; font-size: 0.85rem;"
+            >
+              <span x-text="cat.toUpperCase()"></span> (<span x-text="getChallenges(cat).length"></span>)
+            </button>
+          </template>
+        </div>
+
         <template x-if="challenges && challenges.length > 0">
           <div>
-            <template x-for="(category, idx) in getCategories()" :key="idx">
-              <div class="category-section mb-5">
+            <template x-for="(category, idx) in getCategories().filter(c => selectedCategory === 'ALL' || selectedCategory === c)" :key="idx">
+              <div 
+                class="category-section mb-5"
+                x-show="getChallenges(category).filter(c => !searchQuery || c.name.toLowerCase().includes(searchQuery.toLowerCase()) || (c.category && c.category.toLowerCase().includes(searchQuery.toLowerCase()))).length > 0"
+              >
                 <div class="category-header-banner mb-3 d-flex align-items-center justify-content-between">
                   <div class="d-flex align-items-center gap-2">
-                    <span class="category-pixel-icon">⚡</span>
+                    <span class="category-pixel-icon" style="font-size: 1.25rem;">
+                      <template x-if="category.toLowerCase().includes('web')"><span>🌐</span></template>
+                      <template x-if="category.toLowerCase().includes('crypto')"><span>🔐</span></template>
+                      <template x-if="category.toLowerCase().includes('rev')"><span>⚡</span></template>
+                      <template x-if="category.toLowerCase().includes('pwn')"><span>💥</span></template>
+                      <template x-if="category.toLowerCase().includes('forensic')"><span>🔍</span></template>
+                      <template x-if="category.toLowerCase().includes('osint')"><span>🛰️</span></template>
+                      <template x-if="!category.toLowerCase().includes('web') && !category.toLowerCase().includes('crypto') && !category.toLowerCase().includes('rev') && !category.toLowerCase().includes('pwn') && !category.toLowerCase().includes('forensic') && !category.toLowerCase().includes('osint')"><span>🎯</span></template>
+                    </span>
                     <h3 class="category-name mb-0" x-text="category.toUpperCase()"></h3>
                   </div>
                   <span class="category-count-badge" x-text="getChallenges(category).length + ' SOAL'"></span>
@@ -54,7 +113,7 @@
 
                 <div class="category-challenges">
                   <div class="row g-3">
-                    <template x-for="(c, idx) in getChallenges(category)" :key="c.id">
+                    <template x-for="(c, idx) in getChallenges(category).filter(c => !searchQuery || c.name.toLowerCase().includes(searchQuery.toLowerCase()) || (c.category && c.category.toLowerCase().includes(searchQuery.toLowerCase())))" :key="c.id">
                       <div class="col-sm-6 col-md-4 col-lg-3">
                         <button
                             class="challenge-card-btn w-100"
@@ -65,7 +124,7 @@
                             :value="c.id" @click="loadChallenge(c.id)"
                         >
                           <div class="challenge-card-top d-flex justify-content-between align-items-center">
-                            <span class="challenge-cat-tag" x-text="c.category ? c.category.toUpperCase().substring(0, 8) : 'QUEST'"></span>
+                            <span class="challenge-cat-tag" x-text="c.category ? c.category.toUpperCase().substring(0, 10) : 'QUEST'"></span>
                             <span class="challenge-pts" x-text="c.value + ' PTS'"></span>
                           </div>
 
@@ -75,12 +134,12 @@
 
                           <div class="challenge-card-bottom d-flex justify-content-between align-items-center">
                             <template x-if="c.solved_by_me">
-                              <span class="solved-status-badge">✓ SOLVED</span>
+                              <span class="solved-status-badge"><i class="fas fa-check-circle me-1"></i> SOLVED</span>
                             </template>
                             <template x-if="!c.solved_by_me">
-                              <span class="unsolved-status-badge">▶ PLAY</span>
+                              <span class="unsolved-status-badge"><i class="fas fa-play me-1"></i> PLAY</span>
                             </template>
-                            <span class="challenge-solves-count" x-text="c.solves ? c.solves + ' Solves' : '0 Solves'"></span>
+                            <span class="challenge-solves-count"><i class="fas fa-user-check me-1"></i><span x-text="c.solves ? c.solves : '0'"></span></span>
                           </div>
                         </button>
                       </div>
